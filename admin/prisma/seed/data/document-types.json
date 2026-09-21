@@ -1,0 +1,167 @@
+[
+  {
+    "kind": "COI",
+    "name": "Certificate of Insurance",
+    "description": "Proof of insurance coverage showing the policy holder, carrier, coverage limits, and effective dates.",
+    "summary": "Used to verify that a vendor or subcontractor carries active insurance coverage before work starts.",
+    "structureHints": [
+      "Named insured and additional insured parties",
+      "Insurance carrier and policy number",
+      "Coverage types, limits, and effective dates",
+      "Certificate holder and producer contact details"
+    ],
+    "requiredFields": [
+      "certificateHolder",
+      "namedInsured",
+      "carrier",
+      "policyNumber",
+      "coverageLimits",
+      "effectiveDate",
+      "expirationDate"
+    ],
+    "validationRules": [
+      "Policy must be active on upload date",
+      "Expiration date must be after effective date",
+      "Coverage limits must meet configured minimums",
+      "Certificate holder name must match project record when configured"
+    ],
+    "validationNotes": "COIs are usually valid when the insurer, policy number, coverage limits, and dates are present and current.",
+    "sampleKeywords": ["certificate of insurance", "named insured", "policy number", "effective date"]
+  },
+  {
+    "kind": "LIEN_WAIVER",
+    "name": "Lien Waiver",
+    "description": "A signed document waiving lien rights for a payment amount, often conditional or unconditional and tied to a progress or final payment.",
+    "summary": "Used to confirm payment status and protect the project from mechanics lien exposure.",
+    "structureHints": [
+      "Conditional or unconditional language",
+      "Partial/progress or final payment designation",
+      "Project name and payor/payee details",
+      "Waived amount and exceptions section"
+    ],
+    "requiredFields": [
+      "paymentType",
+      "waiverType",
+      "projectName",
+      "payeeName",
+      "payorName",
+      "waivedAmount",
+      "signature"
+    ],
+    "validationRules": [
+      "Document type must match the configured waiver subtype",
+      "Conditional waivers should reference a pending or recent payment",
+      "Final waivers should indicate final payment when required",
+      "Waived amount must match or exceed the associated pay application amount"
+    ],
+    "validationNotes": "Lien waivers are valid when the waiver type, payment stage, amount, signatures, and exceptions all align with the payment event.",
+    "sampleKeywords": ["lien waiver", "waiver and release", "conditional", "unconditional", "final payment"]
+  },
+  {
+    "kind": "INVOICE",
+    "name": "Invoice PDF",
+    "description": "A billing document listing the seller, buyer, line items, totals, tax, payment terms, and due date.",
+    "summary": "Used to match billed work or materials against a project, purchase order, or payment request.",
+    "structureHints": [
+      "Invoice number and invoice date",
+      "Bill-to and remit-to parties",
+      "Line items with quantities and unit prices",
+      "Subtotal, tax, shipping, discounts, and total due"
+    ],
+    "requiredFields": [
+      "invoiceNumber",
+      "invoiceDate",
+      "vendorName",
+      "billToName",
+      "lineItems",
+      "subtotal",
+      "totalDue",
+      "dueDate"
+    ],
+    "validationRules": [
+      "Invoice number must be present and unique per vendor when configured",
+      "Line items must contain descriptions and amounts",
+      "Total must reconcile to line items plus tax and adjustments",
+      "Due date must not precede invoice date"
+    ],
+    "validationNotes": "Invoices are valid when the billing identifiers, line-item math, and payment terms are internally consistent.",
+    "sampleKeywords": ["invoice", "bill to", "due date", "subtotal", "total due"]
+  },
+  {
+    "kind": "SUBMITTAL",
+    "name": "Equipment Submittal",
+    "description": "A construction submittal package that shows product data, shop drawings, cut sheets, and installation details for review.",
+    "summary": "Used to confirm the proposed equipment or material matches the specification before procurement or installation.",
+    "structureHints": [
+      "Specification reference and submittal identifier",
+      "Manufacturer and model information",
+      "Cut sheets, drawings, and attachments",
+      "Dimensions, performance data, and installation notes"
+    ],
+    "requiredFields": [
+      "submittalNumber",
+      "specSection",
+      "manufacturer",
+      "modelNumber",
+      "productData",
+      "dimensions",
+      "installationInstructions"
+    ],
+    "validationRules": [
+      "Manufacturer and model must match the approved submittal record when configured",
+      "Product data must contain the required performance values",
+      "Dimensions must fit project constraints when configured",
+      "Attachments must include the referenced cut sheet or shop drawing"
+    ],
+    "validationNotes": "Submittals are valid when the equipment or product data aligns with the spec section and includes enough technical detail for review.",
+    "sampleKeywords": ["submittal", "shop drawing", "cut sheet", "spec section", "manufacturer"]
+  },
+  {
+    "kind": "RFP",
+    "name": "Request for Proposal",
+    "description": "A procurement document asking vendors to propose a solution, approach, schedule, and price for a defined scope.",
+    "summary": "Used to collect structured proposals from vendors when the buyer needs more than just pricing.",
+    "structureHints": [
+      "Project objectives and scope",
+      "Proposal instructions and deadlines",
+      "Evaluation criteria and submission format",
+      "Technical and commercial response sections"
+    ],
+    "requiredFields": [
+      "projectObjective",
+      "scopeOfWork",
+      "submissionDeadline",
+      "evaluationCriteria",
+      "vendorInstructions"
+    ],
+    "validationRules": [
+      "Proposal should include a response to each required section",
+      "Deadline and submission instructions must be present",
+      "Vendor contact and bid form details should be identifiable",
+      "Pricing, schedule, and scope response should be present when required"
+    ],
+    "validationNotes": "RFPs are valid when the proposal structure is complete and the vendor response matches the requested scope and criteria.",
+    "sampleKeywords": ["request for proposal", "scope of work", "evaluation criteria", "submission deadline"]
+  },
+  {
+    "kind": "RFQ",
+    "name": "Request for Quotation",
+    "description": "A procurement document asking vendors to quote specific products or services with defined specifications.",
+    "summary": "Used when the buyer already knows the requirements and mainly needs comparable pricing.",
+    "structureHints": [
+      "Item or service specifications",
+      "Quantities and delivery expectations",
+      "Payment terms and quote validity",
+      "Vendor pricing table or line-item quote form"
+    ],
+    "requiredFields": ["specifications", "quantities", "quoteDueDate", "paymentTerms", "pricing"],
+    "validationRules": [
+      "Specifications must be detailed enough for a comparable quote",
+      "Pricing must exist for each quoted line item",
+      "Quote validity period or expiration should be present when configured",
+      "Vendor response should reference the same requested quantity or unit"
+    ],
+    "validationNotes": "RFQs are valid when the quote clearly matches the requested items or services and includes comparable pricing.",
+    "sampleKeywords": ["request for quotation", "quote", "pricing", "specification", "quantity"]
+  }
+]
