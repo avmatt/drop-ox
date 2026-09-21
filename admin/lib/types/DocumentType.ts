@@ -1,4 +1,5 @@
 export type DocumentType = {
+  id: string;
   kind: string;
   name: string;
   description: string;
