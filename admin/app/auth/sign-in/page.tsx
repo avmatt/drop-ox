@@ -4,8 +4,9 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth/auth";
 import { Route } from "@/lib/routes";
+import { SignInButton } from "./components/SignInButton";
 
-export default async function Home() {
+export default async function SignInPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -18,21 +19,27 @@ export default async function Home() {
     <div className="flex flex-1 items-center justify-center bg-zinc-100 p-6">
       <main className="w-full max-w-xl rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
-          Home
+          Authentication
         </p>
         <h1 className="mb-3 text-3xl font-semibold tracking-tight text-zinc-900">
-          DropOX
+          Sign In
         </h1>
         <p className="mb-8 text-zinc-600">
-          Welcome. Use the sign in page to sign in with Microsoft Entra ID.
+          Sign in with Microsoft Entra ID to access your files.
         </p>
 
+        <div className="mb-8 rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+          <p className="text-sm font-medium text-zinc-700">Current session</p>
+          <p className="mt-1 text-sm text-zinc-600">No active session</p>
+        </div>
+
         <div className="flex flex-col items-start gap-4">
+          <SignInButton />
           <Link
-            className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800"
-            href={Route.SignIn}
+            className="text-sm font-semibold text-zinc-900 underline underline-offset-4"
+            href={Route.Home}
           >
-            Sign in
+            Back home
           </Link>
         </div>
       </main>
