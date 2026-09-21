@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { SignOutButton } from "@/app/(authenticated)/files/components/SignOutButton";
+import { SignOutButton } from "@/app/(authenticated)/dashboard/components/SignOutButton";
 
 const { pushMock, refreshMock, signOutMock } = vi.hoisted(() => ({
   pushMock: vi.fn(),
