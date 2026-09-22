@@ -17,11 +17,11 @@ function toStringArray(value: unknown) {
 }
 
 type DocumentTypeDetailsPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDetailsPageProps) {
-  const { id } = params;
+  const { id } = await params;
   const documentType = await db.documentType.findUnique({
     where: { id },
   });
@@ -36,7 +36,7 @@ export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDe
         items={[
           { label: "Dashboard", href: Route.Dashboard },
           { label: "Document Types", href: Route.DocumentTypes },
-          { label: "Details" },
+          { label: documentType.name },
         ]}
       />
 

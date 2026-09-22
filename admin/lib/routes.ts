@@ -3,4 +3,5 @@ export const Route = {
     SignIn: "/auth/sign-in",
     Dashboard: "/dashboard",
     DocumentTypes: "/dashboard/document-types",
+    Projects: "/dashboard/projects",
 };
