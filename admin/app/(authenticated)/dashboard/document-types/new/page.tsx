@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Breadcrumbs } from "ox-ui";
 import { Route } from "@/lib/routes";
 import { DocumentTypeForm } from "../../components/DocumentTypeForm";
 import { createDocumentTypeAction } from "../actions";

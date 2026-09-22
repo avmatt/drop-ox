@@ -1,5 +1,5 @@
 {
-  "name": "portal",
+  "name": "@drop-ox/portal",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "next": "16.3.5",
+    "ox-ui": "file:../ox-ui/ox-ui-0.1.0.tgz",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },

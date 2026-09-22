@@ -1,8 +1,6 @@
 import type { HTMLAttributes } from "react";
 
-function joinClasses(...classes: Array<string | undefined | false>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { joinClasses } from "./utils.js";
 
 type CardVariant = "default" | "danger";
 

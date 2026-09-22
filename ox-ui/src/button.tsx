@@ -1,4 +1,6 @@
-import type { ButtonHTMLAttributes } from "react";
+import type { ComponentPropsWithoutRef, ElementType } from "react";
+
+import { joinClasses } from "./utils.js";
 
 export type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
 type ButtonSize = "sm" | "md";
@@ -8,10 +10,6 @@ type ButtonClassOptions = {
   size?: ButtonSize;
   fullWidth?: boolean;
 };
-
-function joinClasses(...classes: Array<string | undefined | false>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export function buttonClasses({
   variant = "primary",
@@ -38,20 +36,26 @@ export function buttonClasses({
   );
 }
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
-  ButtonClassOptions & {
-    className?: string;
-  };
+type ButtonOwnProps<T extends ElementType> = ButtonClassOptions & {
+  as?: T;
+  className?: string;
+};
 
-export function Button({
+type ButtonProps<T extends ElementType = "button"> = ButtonOwnProps<T> &
+  Omit<ComponentPropsWithoutRef<T>, keyof ButtonOwnProps<T>>;
+
+export function Button<T extends ElementType = "button">({
+  as,
   variant = "primary",
   size = "md",
   fullWidth = false,
   className,
   ...props
-}: ButtonProps) {
+}: ButtonProps<T>) {
+  const Component = as ?? "button";
+
   return (
-    <button
+    <Component
       className={joinClasses(
         buttonClasses({ variant, size, fullWidth }),
         className,

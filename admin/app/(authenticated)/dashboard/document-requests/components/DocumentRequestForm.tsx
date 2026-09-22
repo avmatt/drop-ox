@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import { Button, Card } from "ox-ui";
 import { useRef, useState } from "react";
 
 import {
