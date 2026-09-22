@@ -14,8 +14,8 @@
     "test:watch": "vitest"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
+    "seed": "tsx prisma/seed/seed.ts"
+  }
   "dependencies": {
     "@headlessui/react": "^2.2.10",
     "@prisma/adapter-pg": "^7.10.0",
