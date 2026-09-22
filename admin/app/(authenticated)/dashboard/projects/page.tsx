@@ -8,6 +8,15 @@ import { ProjectTable } from "./components/ProjectTable";
 
 export default async function ProjectsPage() {
   const projects = await db.project.findMany({
+    select: {
+      id: true,
+      code: true,
+      name: true,
+      client: true,
+      status: true,
+      startDate: true,
+      updatedAt: true,
+    },
     orderBy: [{ isActive: "desc" }, { updatedAt: "desc" }],
   });
 
