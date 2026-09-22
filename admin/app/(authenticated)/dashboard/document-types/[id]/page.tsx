@@ -15,12 +15,11 @@ function toStringArray(value: unknown) {
 }
 
 type DocumentTypeDetailsPageProps = {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 };
 
 export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDetailsPageProps) {
-  const { id } = await params;
-
+  const { id } = params;
   const documentType = await db.documentType.findUnique({
     where: { id },
   });
