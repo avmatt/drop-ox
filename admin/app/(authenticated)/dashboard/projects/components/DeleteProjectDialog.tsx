@@ -5,15 +5,12 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/Button";
 
-type DeleteDocumentTypeDialogProps = {
-  documentTypeId: string;
+type DeleteProjectDialogProps = {
+  projectId: string;
   action: (formData: FormData) => Promise<void>;
 };
 
-export function DeleteDocumentTypeDialog({
-  documentTypeId,
-  action,
-}: DeleteDocumentTypeDialogProps) {
+export function DeleteProjectDialog({ projectId, action }: DeleteProjectDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -24,7 +21,7 @@ export function DeleteDocumentTypeDialog({
         variant="secondary"
         className="mt-4 border-red-300 text-red-800 hover:bg-red-100"
       >
-        Delete Document Type
+        Delete Project
       </Button>
 
       <Dialog open={isOpen} onClose={setIsOpen} className="relative z-50">
@@ -37,26 +34,17 @@ export function DeleteDocumentTypeDialog({
             </DialogTitle>
 
             <p className="mt-3 text-sm text-zinc-700">
-              Deleting this document type is permanent and cannot be undone.
+              Deleting this project is permanent and cannot be undone.
             </p>
 
             <div className="mt-6 flex items-center justify-end gap-2">
-              <Button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                variant="secondary"
-                size="sm"
-              >
+              <Button type="button" onClick={() => setIsOpen(false)} variant="secondary" size="sm">
                 Cancel
               </Button>
 
               <form action={action}>
-                <input type="hidden" name="id" value={documentTypeId} />
-                <Button
-                  type="submit"
-                  variant="danger"
-                  size="sm"
-                >
+                <input type="hidden" name="id" value={projectId} />
+                <Button type="submit" variant="danger" size="sm">
                   Confirm Delete
                 </Button>
               </form>

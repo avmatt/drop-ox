@@ -1,6 +1,9 @@
 import Link from "next/link";
 
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { buttonClasses } from "@/components/ui/Button";
 import { db } from "@/lib/db/db";
+import { Route } from "@/lib/routes";
 import { DocumentTypeTable } from "../components/DocumentTypeTable";
 
 export default async function DocumentTypesPage() {
@@ -10,21 +13,7 @@ export default async function DocumentTypesPage() {
 
   return (
     <div className="space-y-6">
-      <nav aria-label="Breadcrumb" className="text-sm text-zinc-600">
-        <ol className="flex flex-wrap items-center gap-2">
-          <li>
-            <Link href="/dashboard" className="font-medium text-zinc-700 transition hover:text-zinc-900">
-              Dashboard
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-zinc-400">
-            /
-          </li>
-          <li className="font-semibold text-zinc-900" aria-current="page">
-            Document Types
-          </li>
-        </ol>
-      </nav>
+      <Breadcrumbs items={[{ label: "Dashboard", href: Route.Dashboard }, { label: "Document Types" }]} />
 
       <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -40,8 +29,8 @@ export default async function DocumentTypesPage() {
         </div>
 
         <Link
-          href="/dashboard/document-types/new"
-          className="h-fit rounded-full bg-black px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-800"
+          href={`${Route.DocumentTypes}/new`}
+          className={buttonClasses({ size: "sm" })}
         >
           New document type
         </Link>

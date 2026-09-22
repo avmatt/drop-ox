@@ -1,0 +1,46 @@
+[
+  {
+    "code": "PRJ-001",
+    "name": "Northwind Offices",
+    "client": "Northwind Group",
+    "status": "ACTIVE",
+    "summary": "Corporate office fit-out and document control rollout.",
+    "description": "Coordinate design approvals, vendor onboarding, and staged document tracking for a multi-site office upgrade.",
+    "startDate": "2026-01-15T00:00:00.000Z",
+    "endDate": "2026-12-18T00:00:00.000Z",
+    "isActive": true
+  },
+  {
+    "code": "PRJ-002",
+    "name": "Harbor Logistics",
+    "client": "Harbor Transport",
+    "status": "PLANNING",
+    "summary": "Implementation planning for logistical document workflows and asset tagging.",
+    "description": "Define delivery milestones, process ownership, and required compliance checks for an operational logistics rollout.",
+    "startDate": "2026-03-01T00:00:00.000Z",
+    "endDate": null,
+    "isActive": true
+  },
+  {
+    "code": "PRJ-003",
+    "name": "Summit Health",
+    "client": "Summit Medical",
+    "status": "ON_HOLD",
+    "summary": "Pending stakeholder review for internal health record intake workflows.",
+    "description": "Hold project kickoff while governance approvals and operational scope alignment are finalized.",
+    "startDate": "2025-11-10T00:00:00.000Z",
+    "endDate": null,
+    "isActive": false
+  },
+  {
+    "code": "PRJ-004",
+    "name": "Atlas Industrial",
+    "client": "Atlas Manufacturing",
+    "status": "COMPLETED",
+    "summary": "Closed project with validated QA and final sign-off complete.",
+    "description": "Delivered the implementation, training, and handoff for the industrial compliance document set.",
+    "startDate": "2025-06-01T00:00:00.000Z",
+    "endDate": "2025-12-20T00:00:00.000Z",
+    "isActive": false
+  }
+]

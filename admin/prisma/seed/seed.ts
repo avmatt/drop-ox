@@ -1,8 +1,21 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/client";
+import { ProjectStatus } from "../generated/enums";
 import { Pool } from "pg";
 
 import DOCUMENT_TYPES from "./data/document-types.json";
+import PROJECTS from "./data/projects.json";
+
+const PROJECT_STATUS_VALUES = Object.values(ProjectStatus);
+
+function toProjectStatus(value: string) {
+  if (!PROJECT_STATUS_VALUES.includes(value as (typeof ProjectStatus)[keyof typeof ProjectStatus])) {
+    throw new Error(`Unsupported project status: ${value}`);
+  }
+
+  return value as (typeof ProjectStatus)[keyof typeof ProjectStatus];
+}
+
 const connectionString = process.env.DATABASE_URL;
 
 if (connectionString === undefined) {
@@ -54,6 +67,44 @@ async function main() {
         validationNotes: documentType.validationNotes,
         sampleKeywords: documentType.sampleKeywords,
         isActive: true,
+      },
+    });
+  }
+
+  for (const project of PROJECTS) {
+    const existingProject = await prisma.project.findUnique({
+      where: { code: project.code },
+    });
+
+    if (existingProject === null) {
+      await prisma.project.create({
+        data: {
+          code: project.code,
+          name: project.name,
+          client: project.client,
+          status: toProjectStatus(project.status),
+          summary: project.summary,
+          description: project.description,
+          startDate: new Date(project.startDate),
+          endDate: project.endDate ? new Date(project.endDate) : null,
+          isActive: project.isActive,
+        },
+      });
+      continue;
+    }
+
+    await prisma.project.update({
+      where: { id: existingProject.id },
+      data: {
+        code: project.code,
+        name: project.name,
+        client: project.client,
+        status: toProjectStatus(project.status),
+        summary: project.summary,
+        description: project.description,
+        startDate: new Date(project.startDate),
+        endDate: project.endDate ? new Date(project.endDate) : null,
+        isActive: project.isActive,
       },
     });
   }
