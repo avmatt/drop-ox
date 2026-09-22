@@ -29,7 +29,7 @@ export default async function DocumentTypesPage() {
         </div>
 
         <Link
-          href="/dashboard/document-types/new"
+          href={`${Route.DocumentTypes}/new`}
           className={buttonClasses({ size: "sm" })}
         >
           New document type
