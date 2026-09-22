@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { auth } from "@/lib/auth/auth";
 import { Route } from "@/lib/routes";
 import { AuthDropdown } from "./components/AuthDropdown";
+import { ToastHost } from "./components/ToastHost";
 
 type AuthenticatedLayoutProps = {
   children: ReactNode;
@@ -35,6 +36,8 @@ export default async function AuthenticatedLayout({
           <AuthDropdown email={session.user.email} name={name} />
         </div>
       </header>
+
+      <ToastHost />
 
       <div className="mx-auto flex w-full max-w-7xl gap-6 px-6 py-6">
         <aside className="h-fit w-64 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
