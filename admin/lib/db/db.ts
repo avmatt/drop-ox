@@ -12,18 +12,20 @@ if (connectionString === undefined) {
   throw new Error("DATABASE_URL is required");
 }
 
-const adapter = new PrismaPg(
-  new Pool({
-    connectionString,
-  }),
-);
+function createPrismaClient() {
+  const adapter = new PrismaPg(
+    new Pool({
+      connectionString,
+    }),
+  );
 
-export const db =
-  globalThis.prisma ??
-  new PrismaClient({
+  return new PrismaClient({
     adapter,
     log: process.env.NODE_ENV === "development" ? ["query", "warn", "error"] : ["error"],
   });
+}
+
+export const db = globalThis.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
   globalThis.prisma = db;
