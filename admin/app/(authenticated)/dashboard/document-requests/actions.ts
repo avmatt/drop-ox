@@ -164,7 +164,6 @@ export async function updateDocumentRequestAction(formData: FormData) {
       recipientName: payload.recipientName,
       status: payload.status,
       message: payload.message,
-      sentAt: payload.sentAt,
       requestedDocumentTypes: {
         deleteMany: {},
         create: buildDocumentTypeCreates(payload.selectedDocumentTypeIds),
