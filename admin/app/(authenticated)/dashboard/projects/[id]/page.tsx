@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Card } from "@/components/ui/Card";
+import { ConfirmationDialog } from "@/components/ui/ConfirmationDialog";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
-import { DeleteProjectDialog } from "../components/DeleteProjectDialog";
 import { ProjectForm } from "../components/ProjectForm";
 import { deleteProjectAction, updateProjectAction } from "../actions";
 
@@ -58,7 +58,15 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
         <p className="text-sm text-red-900">
           Deleting this project is permanent and cannot be undone.
         </p>
-        <DeleteProjectDialog projectId={project.id} action={deleteProjectAction} />
+        <ConfirmationDialog
+          triggerLabel="Delete Project"
+          title="Confirm Deletion"
+          description="Deleting this project is permanent and cannot be undone."
+          confirmLabel="Confirm Delete"
+          hiddenFields={[{ name: "id", value: project.id }]}
+          action={deleteProjectAction}
+          triggerClassName="mt-4 border-red-300 text-red-800 hover:bg-red-100"
+        />
       </Card>
     </div>
   );

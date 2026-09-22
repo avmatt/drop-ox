@@ -4,4 +4,5 @@ export const Route = {
     Dashboard: "/dashboard",
     DocumentTypes: "/dashboard/document-types",
     Projects: "/dashboard/projects",
+    DocumentRequests: "/dashboard/document-requests",
 };

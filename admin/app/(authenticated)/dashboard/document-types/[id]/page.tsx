@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Card } from "@/components/ui/Card";
+import { ConfirmationDialog } from "@/components/ui/ConfirmationDialog";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
 import { DocumentTypeForm } from "../../components/DocumentTypeForm";
-import { DeleteDocumentTypeDialog } from "../components/DeleteDocumentTypeDialog";
 import { deleteDocumentTypeAction, updateDocumentTypeAction } from "../actions";
 
 function toStringArray(value: unknown) {
@@ -66,9 +66,14 @@ export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDe
         <p className="text-sm text-red-900">
           Deleting this document type is permanent and cannot be undone.
         </p>
-        <DeleteDocumentTypeDialog
-          documentTypeId={documentType.id}
+        <ConfirmationDialog
+          triggerLabel="Delete Document Type"
+          title="Confirm Deletion"
+          description="Deleting this document type is permanent and cannot be undone."
+          confirmLabel="Confirm Delete"
+          hiddenFields={[{ name: "id", value: documentType.id }]}
           action={deleteDocumentTypeAction}
+          triggerClassName="mt-4 border-red-300 text-red-800 hover:bg-red-100"
         />
       </Card>
     </div>

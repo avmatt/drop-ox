@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { auth } from "@/lib/auth/auth";
 import { Route } from "@/lib/routes";
 import { AuthDropdown } from "./components/AuthDropdown";
+import { ToastHost } from "./components/ToastHost";
 
 type AuthenticatedLayoutProps = {
   children: ReactNode;
@@ -36,6 +37,8 @@ export default async function AuthenticatedLayout({
         </div>
       </header>
 
+      <ToastHost />
+
       <div className="mx-auto flex w-full max-w-7xl gap-6 px-6 py-6">
         <aside className="h-fit w-64 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">Navigation</p>
@@ -57,6 +60,12 @@ export default async function AuthenticatedLayout({
               className="block rounded-lg px-3 py-2 text-sm font-medium text-zinc-800 transition hover:bg-zinc-100"
             >
               Projects
+            </Link>
+            <Link
+              href={Route.DocumentRequests}
+              className="block rounded-lg px-3 py-2 text-sm font-medium text-zinc-800 transition hover:bg-zinc-100"
+            >
+              Document Requests
             </Link>
           </nav>
         </aside>
