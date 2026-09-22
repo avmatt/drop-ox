@@ -2,8 +2,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/client";
 import { Pool } from "pg";
 
-import * as DOCUMENT_TYPES from "./data/document-types.json";
-
+import DOCUMENT_TYPES from "./data/document-types.json";
 const connectionString = process.env.DATABASE_URL;
 
 if (connectionString === undefined) {
