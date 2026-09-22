@@ -102,15 +102,22 @@ async function getDocumentRequestEmailContent(documentRequestId: string) {
     `A new document request has been created for ${documentRequest.project.name}.`,
     `Requested documents: ${documentTypeNames}`,
     "",
-    `If you have any questions, reply to this email at ${documentRequest.recipientEmail}.`,
+    "If you have any questions, reply to this email.",
   ].join("\n");
+
+  const escapeHtml = (value: string) =>
+    value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+
+  const htmlText = escapeHtml(text).replaceAll("\n", "<br />");
 
   const html = `
     <div style="font-family: Arial, Helvetica, sans-serif; color: #18181b; line-height: 1.5;">
-      <p>Hello${documentRequest.recipientName ? ` ${documentRequest.recipientName}` : ""},</p>
-      <p>A new document request has been created for <strong>${documentRequest.project.name}</strong>.</p>
-      <p><strong>Requested documents:</strong> ${documentTypeNames}</p>
-      <p>If you have any questions, reply to this email at <a href="mailto:${documentRequest.recipientEmail}">${documentRequest.recipientEmail}</a>.</p>
+      ${htmlText}
     </div>
   `;
 
@@ -162,7 +169,6 @@ export async function updateDocumentRequestAction(formData: FormData) {
       recipientName: payload.recipientName,
       status: payload.status,
       message: payload.message,
-      sentAt: payload.sentAt,
       requestedDocumentTypes: {
         deleteMany: {},
         create: buildDocumentTypeCreates(payload.selectedDocumentTypeIds),
