@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../prisma/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ValidationStatus {
+  PENDING
+  VALID
+  INVALID
+}
+
+model DocumentType {
+  id                String            @id @default(cuid())
+  kind              String
+  name              String
+  description       String
+  summary           String
+  structureHints    Json
+  requiredFields    Json
+  validationRules   Json
+  validationNotes   String
+  sampleKeywords    Json
+  isActive          Boolean           @default(true)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  documents         Document[]
+}
+
+model Document {
+  id               String           @id @default(cuid())
+  documentTypeId   String
+  fileName         String
+  fileUrl          String?
+  extractedData    Json?
+  validationStatus ValidationStatus @default(PENDING)
+  validationScore  Int?
+  validationNotes  String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  documentType DocumentType @relation(fields: [documentTypeId], references: [id], onDelete: Cascade)
+
+  @@index([documentTypeId])
+  @@index([validationStatus])
+}
