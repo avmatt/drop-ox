@@ -72,7 +72,7 @@ export default async function DashboardPage() {
             </CardDescription>
           </CardHeader>
           <Link
-            href="/dashboard/document-types"
+            href={Route.DocumentTypes}
             className={buttonClasses({ size: "sm" })}
           >
             Open document types
