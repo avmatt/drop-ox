@@ -1,0 +1,48 @@
+import Link from "next/link";
+
+type BreadcrumbItem = {
+  label: string;
+  href?: string;
+};
+
+type BreadcrumbsProps = {
+  items: BreadcrumbItem[];
+};
+
+export function Breadcrumbs({ items }: BreadcrumbsProps) {
+  return (
+    <nav aria-label="Breadcrumb" className="text-sm text-zinc-600">
+      <ol className="flex flex-wrap items-center gap-2">
+        {items.map((item, index) => {
+          const isCurrent = index === items.length - 1;
+
+          return (
+            <li key={`${item.label}-${index}`} className="contents">
+              {item.href && !isCurrent ? (
+                <Link
+                  href={item.href}
+                  className="font-medium text-zinc-700 transition hover:text-zinc-900"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <span
+                  className={isCurrent ? "font-semibold text-zinc-900" : "font-medium text-zinc-700"}
+                  aria-current={isCurrent ? "page" : undefined}
+                >
+                  {item.label}
+                </span>
+              )}
+
+              {!isCurrent ? (
+                <span aria-hidden="true" className="text-zinc-400">
+                  /
+                </span>
+              ) : null}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}

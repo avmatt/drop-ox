@@ -1,7 +1,9 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Card } from "@/components/ui/Card";
 import { db } from "@/lib/db/db";
+import { Route } from "@/lib/routes";
 import { DocumentTypeForm } from "../../components/DocumentTypeForm";
 import { DeleteDocumentTypeDialog } from "../components/DeleteDocumentTypeDialog";
 import { deleteDocumentTypeAction, updateDocumentTypeAction } from "../actions";
@@ -30,32 +32,13 @@ export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDe
 
   return (
     <div className="space-y-6">
-      <nav aria-label="Breadcrumb" className="text-sm text-zinc-600">
-        <ol className="flex flex-wrap items-center gap-2">
-          <li>
-            <Link href="/dashboard" className="font-medium text-zinc-700 transition hover:text-zinc-900">
-              Dashboard
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-zinc-400">
-            /
-          </li>
-          <li>
-            <Link
-              href="/dashboard/document-types"
-              className="font-medium text-zinc-700 transition hover:text-zinc-900"
-            >
-              Document Types
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-zinc-400">
-            /
-          </li>
-          <li className="font-semibold text-zinc-900" aria-current="page">
-            Details
-          </li>
-        </ol>
-      </nav>
+      <Breadcrumbs
+        items={[
+          { label: "Dashboard", href: Route.Dashboard },
+          { label: "Document Types", href: Route.DocumentTypes },
+          { label: "Details" },
+        ]}
+      />
 
       <DocumentTypeForm
         title="Document Type Details"
@@ -79,7 +62,7 @@ export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDe
         }}
       />
 
-      <section className="rounded-2xl border border-red-200 bg-red-50 p-6">
+      <Card variant="danger">
         <p className="text-sm text-red-900">
           Deleting this document type is permanent and cannot be undone.
         </p>
@@ -87,7 +70,7 @@ export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDe
           documentTypeId={documentType.id}
           action={deleteDocumentTypeAction}
         />
-      </section>
+      </Card>
     </div>
   );
 }

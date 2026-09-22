@@ -1,37 +1,18 @@
-import Link from "next/link";
-
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Route } from "@/lib/routes";
 import { DocumentTypeForm } from "../../components/DocumentTypeForm";
 import { createDocumentTypeAction } from "../actions";
 
 export default function NewDocumentTypePage() {
   return (
     <div className="space-y-6">
-      <nav aria-label="Breadcrumb" className="text-sm text-zinc-600">
-        <ol className="flex flex-wrap items-center gap-2">
-          <li>
-            <Link href="/dashboard" className="font-medium text-zinc-700 transition hover:text-zinc-900">
-              Dashboard
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-zinc-400">
-            /
-          </li>
-          <li>
-            <Link
-              href="/dashboard/document-types"
-              className="font-medium text-zinc-700 transition hover:text-zinc-900"
-            >
-              Document Types
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-zinc-400">
-            /
-          </li>
-          <li className="font-semibold text-zinc-900" aria-current="page">
-            New
-          </li>
-        </ol>
-      </nav>
+      <Breadcrumbs
+        items={[
+          { label: "Dashboard", href: Route.Dashboard },
+          { label: "Document Types", href: Route.DocumentTypes },
+          { label: "New" },
+        ]}
+      />
 
       <DocumentTypeForm
         title="Create Document Type"
