@@ -21,6 +21,14 @@ enum ProjectStatus {
   CANCELLED
 }
 
+enum DocumentRequestStatus {
+  DRAFT
+  SENT
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
 model DocumentType {
   id                String            @id @default(cuid())
   kind              String
@@ -36,6 +44,7 @@ model DocumentType {
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
   documents         Document[]
+  requestedIn       DocumentRequestDocumentType[]
 }
 
 model Project {
@@ -52,8 +61,41 @@ model Project {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
+  documentRequests DocumentRequest[]
+
   @@index([status])
   @@index([isActive])
+}
+
+model DocumentRequest {
+  id                String              @id @default(cuid())
+  projectId         String
+  recipientEmail    String
+  recipientName     String?
+  status            DocumentRequestStatus @default(DRAFT)
+  message           String?
+  sentAt            DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  project           Project             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  requestedDocumentTypes DocumentRequestDocumentType[]
+
+  @@index([projectId])
+  @@index([status])
+  @@index([recipientEmail])
+}
+
+model DocumentRequestDocumentType {
+  id                String          @id @default(cuid())
+  documentRequestId String
+  documentTypeId    String
+
+  documentRequest   DocumentRequest @relation(fields: [documentRequestId], references: [id], onDelete: Cascade)
+  documentType      DocumentType    @relation(fields: [documentTypeId], references: [id], onDelete: Restrict)
+
+  @@unique([documentRequestId, documentTypeId])
+  @@index([documentTypeId])
 }
 
 model Document {

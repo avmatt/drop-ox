@@ -58,6 +58,12 @@ export default async function AuthenticatedLayout({
             >
               Projects
             </Link>
+            <Link
+              href={Route.DocumentRequests}
+              className="block rounded-lg px-3 py-2 text-sm font-medium text-zinc-800 transition hover:bg-zinc-100"
+            >
+              Document Requests
+            </Link>
           </nav>
         </aside>
 
