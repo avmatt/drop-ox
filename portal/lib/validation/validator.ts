@@ -44,7 +44,7 @@ export function validateDocumentAgainstType(
     : "";
 
   const isSupportedFileType =
-    acceptedMimeTypes.has(fileType) && acceptedExtensions.has(fileExtension);
+    acceptedMimeTypes.has(fileType) || acceptedExtensions.has(fileExtension);
   const isWithinSizeLimit = fileSize > 0 && fileSize <= 10 * 1024 * 1024;
 
   const requiredFields = definition.requiredFields;
