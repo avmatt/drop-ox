@@ -61,6 +61,7 @@ model Project {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   documentRequests DocumentRequest[]
+  documents        Document[]
 
   @@index([status])
   @@index([isActive])
@@ -78,6 +79,7 @@ model DocumentRequest {
   updatedAt              DateTime                      @updatedAt
   project                Project                       @relation(fields: [projectId], references: [id], onDelete: Cascade)
   requestedDocumentTypes DocumentRequestDocumentType[]
+  documents              Document[]
 
   @@index([projectId])
   @@index([status])
@@ -90,24 +92,34 @@ model DocumentRequestDocumentType {
   documentTypeId    String
   documentRequest   DocumentRequest @relation(fields: [documentRequestId], references: [id], onDelete: Cascade)
   documentType      DocumentType    @relation(fields: [documentTypeId], references: [id], onDelete: Restrict)
+  documents         Document[]
 
   @@unique([documentRequestId, documentTypeId])
   @@index([documentTypeId])
 }
 
 model Document {
-  id               String           @id @default(cuid())
-  documentTypeId   String
-  fileName         String
-  fileUrl          String?
-  extractedData    Json?
-  validationStatus ValidationStatus @default(PENDING)
-  validationScore  Int?
-  validationNotes  String?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  documentType     DocumentType     @relation(fields: [documentTypeId], references: [id], onDelete: Cascade)
+  id                         String                     @id @default(cuid())
+  projectId                  String
+  documentRequestId          String
+  documentRequestDocumentTypeId String
+  documentTypeId             String
+  fileName                   String
+  fileUrl                    String?
+  extractedData              Json?
+  validationStatus           ValidationStatus           @default(PENDING)
+  validationScore            Int?
+  validationNotes            String?
+  createdAt                  DateTime                   @default(now())
+  updatedAt                  DateTime                   @updatedAt
+  project                    Project                    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  documentRequest            DocumentRequest            @relation(fields: [documentRequestId], references: [id], onDelete: Cascade)
+  documentRequestDocumentType DocumentRequestDocumentType @relation(fields: [documentRequestDocumentTypeId], references: [id], onDelete: Cascade)
+  documentType               DocumentType               @relation(fields: [documentTypeId], references: [id], onDelete: Cascade)
 
+  @@index([projectId])
+  @@index([documentRequestId])
+  @@index([documentRequestDocumentTypeId])
   @@index([documentTypeId])
   @@index([validationStatus])
 }

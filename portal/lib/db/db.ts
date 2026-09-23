@@ -16,12 +16,18 @@ function createPrismaClient() {
   const adapter = new PrismaPg(
     new Pool({
       connectionString,
+      ssl: {
+        rejectUnauthorized: true,
+      },
     }),
   );
 
   return new PrismaClient({
     adapter,
-    log: process.env.NODE_ENV === "development" ? ["query", "warn", "error"] : ["error"],
+    log:
+      process.env.NODE_ENV === "development"
+        ? ["query", "warn", "error"]
+        : ["error"],
   });
 }
 
