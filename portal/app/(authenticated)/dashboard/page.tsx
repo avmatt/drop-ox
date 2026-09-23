@@ -303,7 +303,7 @@ export default async function DashboardPage() {
                                     </ul>
                                   </div>
 
-                                  <details className="rounded-md border border-zinc-200 bg-zinc-50 p-2">
+                                  {/* <details className="rounded-md border border-zinc-200 bg-zinc-50 p-2">
                                     <summary className="cursor-pointer text-xs font-medium text-zinc-700">
                                       View extracted content
                                     </summary>
@@ -314,7 +314,7 @@ export default async function DashboardPage() {
                                           : "No extracted content available."}
                                       </pre>
                                     </div>
-                                  </details>
+                                  </details> */}
                                 </>
                               ) : null}
                             </div>
@@ -342,7 +342,7 @@ export default async function DashboardPage() {
                                     ) : null}
                                   </div>
 
-                                  <details className="rounded-md border border-zinc-200 bg-zinc-50 p-2">
+                                  {/* <details className="rounded-md border border-zinc-200 bg-zinc-50 p-2">
                                     <summary className="cursor-pointer text-xs font-medium text-zinc-700">
                                       View extracted content
                                     </summary>
@@ -353,13 +353,13 @@ export default async function DashboardPage() {
                                           : "No extracted content available."}
                                       </pre>
                                     </div>
-                                  </details>
+                                  </details> */}
                                 </>
                               ) : null}
 
                               <form
                                 action={uploadDocumentAction}
-                                className="flex flex-col gap-2 sm:flex-row justify-end"
+                                className="flex flex-col gap-2 sm:flex-row justify-between"
                               >
                                 <input
                                   type="hidden"
@@ -390,15 +390,15 @@ export default async function DashboardPage() {
                                       : undefined
                                   }
                                   required
-                                  className="block w-full max-w-xs text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-zinc-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
+                                  className="block w-full max-w-xs text-sm text-zinc-600 file:mr-3 file:rounded-full file:font-semibold file:border-0 file:bg-zinc-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white file:cursor-pointer"
                                 />
-                                <button
+                                <Button
                                   type="submit"
-                                  className="rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-400"
+                                  size="sm"
                                   disabled={!canUpload}
                                 >
                                   Submit
-                                </button>
+                                </Button>
                               </form>
                             </div>
                           )}

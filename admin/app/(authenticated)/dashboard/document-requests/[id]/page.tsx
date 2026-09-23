@@ -81,6 +81,27 @@ function getValidationStatusPillClasses(status: string) {
   return `${baseClasses} bg-amber-100 text-amber-800`;
 }
 
+function getValidationNotesBox(status: string) {
+  if (status === "VALID") {
+    return {
+      title: "Validation passed",
+      classes: "border-emerald-200 bg-emerald-50 text-emerald-700",
+    };
+  }
+
+  if (status === "INVALID") {
+    return {
+      title: "Validation failed",
+      classes: "border-red-200 bg-red-50 text-red-700",
+    };
+  }
+
+  return {
+    title: "Validation pending",
+    classes: "border-amber-200 bg-amber-50 text-amber-700",
+  };
+}
+
 export default async function DocumentRequestDetailsPage({
   params,
 }: DocumentRequestDetailsPageProps) {
@@ -241,6 +262,9 @@ export default async function DocumentRequestDetailsPage({
                               const validationNotes = toValidationNotes(
                                 document.validationNotes,
                               );
+                              const notesBox = getValidationNotesBox(
+                                document.validationStatus,
+                              );
                               const extractedContent =
                                 typeof document.extractedData === "string"
                                   ? document.extractedData.trim()
@@ -289,11 +313,18 @@ export default async function DocumentRequestDetailsPage({
                                   <hr className="my-2 border-zinc-200" />
 
                                   {validationNotes.length > 0 && (
-                                    <ul className="list-disc list-inside text-xs text-zinc-500">
+                                    <div
+                                      className={`rounded-lg border p-2 text-xs ${notesBox.classes}`}
+                                    >
+                                      <p className="text-sm font-bold">
+                                        {notesBox.title}
+                                      </p>
+                                      <ul className="mt-1 list-disc list-inside">
                                         {validationNotes.map((note, index) => (
                                           <li key={`${document.id}-note-${index}`}>{note}</li>
                                         ))}
-                                    </ul>
+                                      </ul>
+                                    </div>
                                   )}
 
                                   <details className="mt-3 rounded-md border border-zinc-200 bg-zinc-50 p-2">

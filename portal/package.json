@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "ui:refresh": "rm -rf node_modules/ox-ui && npm install ox-ui@file:../ox-ui --install-links --force",
