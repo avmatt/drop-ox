@@ -22,6 +22,27 @@ function parseStringList(value: string) {
     .filter((item) => item.length > 0);
 }
 
+function getOptionalText(formData: FormData, key: string) {
+  const value = formData.get(key);
+
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  return value.trim();
+}
+
+function getRequiredPositiveInt(formData: FormData, key: string) {
+  const value = getRequiredText(formData, key);
+  const parsed = Number.parseInt(value, 10);
+
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    throw new Error(`${key} must be a positive number`);
+  }
+
+  return parsed;
+}
+
 function getPayload(formData: FormData) {
   const useAi = formData.get("useAi") === "on";
 

@@ -49,6 +49,10 @@ function getSelectedDocumentTypeIds(formData: FormData) {
     .filter((value): value is string => typeof value === "string" && value.length > 0);
 }
 
+function getRequiredLowercasedEmail(formData: FormData, key: string) {
+  return getRequiredText(formData, key).toLowerCase();
+}
+
 function getPayload(formData: FormData) {
   const selectedDocumentTypeIds = getSelectedDocumentTypeIds(formData);
 
@@ -60,7 +64,7 @@ function getPayload(formData: FormData) {
 
   return {
     projectId: getRequiredText(formData, "projectId"),
-    recipientEmail: getRequiredText(formData, "recipientEmail"),
+    recipientEmail: getRequiredLowercasedEmail(formData, "recipientEmail"),
     recipientName: getOptionalText(formData, "recipientName"),
     status,
     message: getOptionalText(formData, "message"),

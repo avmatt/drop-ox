@@ -10,6 +10,7 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
+  Text,
 } from "ox-ui";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
@@ -51,7 +52,38 @@ function formatValidationData(value: unknown) {
   }
 }
 
-export default async function DocumentRequestDetailsPage({ params }: DocumentRequestDetailsPageProps) {
+function toValidationNotes(value: unknown) {
+  if (Array.isArray(value)) {
+    return value.filter(
+      (item): item is string => typeof item === "string" && item.length > 0,
+    );
+  }
+
+  if (typeof value === "string" && value.trim().length > 0) {
+    return [value.trim()];
+  }
+
+  return [];
+}
+
+function getValidationStatusPillClasses(status: string) {
+  const baseClasses =
+    "rounded-full px-2 py-1 text-xs font-semibold";
+
+  if (status === "VALID") {
+    return `${baseClasses} bg-emerald-100 text-emerald-800`;
+  }
+
+  if (status === "INVALID") {
+    return `${baseClasses} bg-red-100 text-red-800`;
+  }
+
+  return `${baseClasses} bg-amber-100 text-amber-800`;
+}
+
+export default async function DocumentRequestDetailsPage({
+  params,
+}: DocumentRequestDetailsPageProps) {
   const { id } = await params;
 
   const documentRequest = await db.documentRequest.findUnique({
@@ -85,7 +117,9 @@ export default async function DocumentRequestDetailsPage({ params }: DocumentReq
 
   const [projects, documentTypes] = await Promise.all([
     db.project.findMany({ orderBy: [{ isActive: "desc" }, { name: "asc" }] }),
-    db.documentType.findMany({ orderBy: [{ isActive: "desc" }, { name: "asc" }] }),
+    db.documentType.findMany({
+      orderBy: [{ isActive: "desc" }, { name: "asc" }],
+    }),
   ]);
 
   return (
@@ -141,13 +175,10 @@ export default async function DocumentRequestDetailsPage({ params }: DocumentReq
       <Card className="space-y-6 overflow-hidden">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
-              Summary
-            </p>
-            <p className="mt-2 text-lg font-semibold text-zinc-900">
+            <Text variant="primary" size="lg" as="div">
               {documentRequest.recipientEmail}
-            </p>
-            <p className="text-sm text-zinc-600">{documentRequest.project.name}</p>
+            </Text>
+            <p>{documentRequest.project.name}</p>
           </div>
 
           <ConfirmationDialog
@@ -155,9 +186,15 @@ export default async function DocumentRequestDetailsPage({ params }: DocumentReq
             title="Confirm Send"
             description={
               <>
-                Send this document request to <span className="font-medium">{documentRequest.recipientEmail}</span>{" "}
-                for <span className="font-medium">{documentRequest.project.name}</span>? This will email
-                the request immediately.
+                Send this document request to{" "}
+                <span className="font-medium">
+                  {documentRequest.recipientEmail}
+                </span>{" "}
+                for{" "}
+                <span className="font-medium">
+                  {documentRequest.project.name}
+                </span>
+                ? This will email the request immediately.
               </>
             }
             confirmLabel="Confirm Send"
@@ -166,80 +203,96 @@ export default async function DocumentRequestDetailsPage({ params }: DocumentReq
           />
         </div>
 
-        <p className="text-sm text-zinc-700">Sent at: {formatDateTime(documentRequest.sentAt)}</p>
+        <div>
+          <Text variant="secondary" size="xs">
+            Sent at
+          </Text>
+          <div>{formatDateTime(documentRequest.sentAt)}</div>
+        </div>
 
         <div>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.08em] text-zinc-500">
+          <Text variant="secondary" size="xs" className="mb-2">
             Requested Documents
-          </p>
+          </Text>
           <div className="overflow-x-auto rounded-xl border border-zinc-200">
             <Table>
               <TableHead>
                 <TableRow>
                   <TableHeaderCell>Document Type</TableHeaderCell>
-                  <TableHeaderCell>Kind</TableHeaderCell>
-                  <TableHeaderCell>Validation Results</TableHeaderCell>
+                  <TableHeaderCell>Status</TableHeaderCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {documentRequest.requestedDocumentTypes.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell className="text-zinc-900">
-                      <p className="font-semibold text-zinc-900">{item.documentType.name}</p>
+                    <TableCell className="font-semibold text-zinc-900">
+                      {item.documentType.name}
+                      <Text variant="secondary" size="xs">
+                        {item.documentType.kind}
+                      </Text>
                     </TableCell>
-                    <TableCell>{item.documentType.kind}</TableCell>
-                    <TableCell className="px-4 py-4">
+                    <TableCell>
                       {item.documents.length === 0 ? (
                         <p className="text-zinc-600">No uploads yet.</p>
                       ) : (
                         <div className="space-y-3">
-                          {item.documents.map((document) => (
-                            <div key={document.id} className="rounded-lg border border-zinc-200 p-3">
-                              <div className="flex flex-wrap items-center gap-2 text-sm">
-                                <span className="font-medium text-zinc-900">{document.fileName}</span>
-                                <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-700">
-                                  {document.validationStatus}
-                                </span>
-                                {typeof document.validationScore === "number" ? (
-                                  <span className="text-xs text-zinc-600">
-                                    Score: {document.validationScore}
-                                  </span>
-                                ) : null}
-                              </div>
+                          {item.documents.map((document) =>
+                            (() => {
+                              const validationNotes = toValidationNotes(
+                                document.validationNotes,
+                              );
 
-                              <p className="mt-1 text-xs text-zinc-500">
-                                Uploaded: {formatDateTime(document.createdAt)}
-                              </p>
-
-                              {document.fileUrl ? (
-                                <a
-                                  href={document.fileUrl}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  className="mt-1 inline-block text-xs text-blue-600 underline"
+                              return (
+                                <div
+                                  key={document.id}
+                                  className="rounded-lg border border-zinc-200 p-3"
                                 >
-                                  Open uploaded file
-                                </a>
-                              ) : null}
+                                  <div className="flex gap-2 text-sm">
+                                    <span className="font-medium text-zinc-900">
+                                      {document.fileName}
+                                    </span>
+                                    <div>
+                                      <span
+                                        className={getValidationStatusPillClasses(
+                                          document.validationStatus,
+                                        )}
+                                      >
+                                        {document.validationStatus}
+                                      </span>
+                                    </div>
+                                  </div>
 
-                              {document.validationNotes ? (
-                                <p className="mt-2 text-xs text-zinc-700">
-                                  <span className="font-medium">Notes:</span> {document.validationNotes}
-                                </p>
-                              ) : (
-                                <p className="mt-2 text-xs text-zinc-500">No validation notes.</p>
-                              )}
+                                  <hr className="my-2 border-zinc-200" />
 
-                              <details className="mt-2">
-                                <summary className="cursor-pointer text-xs font-medium text-zinc-700">
-                                  View extracted validation data
-                                </summary>
-                                <pre className="mt-2 max-h-48 overflow-auto rounded bg-zinc-50 p-2 text-[11px] text-zinc-700">
-                                  {formatValidationData(document.extractedData)}
-                                </pre>
-                              </details>
-                            </div>
-                          ))}
+                                  <p className="mt-1 text-xs text-zinc-500">
+                                    Uploaded:{" "}
+                                    {formatDateTime(document.createdAt)}
+                                  </p>
+
+                                  {document.fileUrl ? (
+                                    <a
+                                      href={document.fileUrl}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="mt-1 inline-block text-xs text-blue-600 underline"
+                                    >
+                                      Open uploaded file
+                                    </a>
+                                  ) : null}
+
+                                  <hr className="my-2 border-zinc-200" />
+
+                                  {validationNotes.length > 0 && (
+                                    <ul className="list-disc list-inside text-xs text-zinc-500">
+                                        {validationNotes.map((note, index) => (
+                                          <li key={`${document.id}-note-${index}`}>{note}</li>
+                                        ))}
+                                    </ul>
+                                  )}
+                                </div>
+                              );
+                            })(),
+                          )}
                         </div>
                       )}
                     </TableCell>

@@ -26,6 +26,18 @@ function formatDate(value: Date) {
   }).format(value);
 }
 
+function toValidationNotes(value: unknown) {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string" && item.length > 0);
+  }
+
+  if (typeof value === "string" && value.trim().length > 0) {
+    return [value.trim()];
+  }
+
+  return [];
+}
+
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -150,6 +162,9 @@ export default async function DashboardPage() {
                     const failedDocument = item.documents.find(
                       (doc) => doc.validationStatus === "INVALID",
                     );
+                    const failedValidationNotes = toValidationNotes(
+                      failedDocument?.validationNotes,
+                    );
                     const canUpload = !existingDocument;
 
                     return (
@@ -187,10 +202,12 @@ export default async function DashboardPage() {
                                     Last upload failed validation.
                                   </p>
                                   <p>File: {failedDocument.fileName}</p>
-                                  {failedDocument.validationNotes ? (
-                                    <p className="mt-1">
-                                      {failedDocument.validationNotes}
-                                    </p>
+                                  {failedValidationNotes.length > 0 ? (
+                                    <ul className="mt-1 list-disc space-y-1 pl-4">
+                                      {failedValidationNotes.map((note, index) => (
+                                        <li key={`${failedDocument.id}-note-${index}`}>{note}</li>
+                                      ))}
+                                    </ul>
                                   ) : null}
                                 </div>
                               ) : null}

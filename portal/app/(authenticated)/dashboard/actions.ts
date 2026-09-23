@@ -112,7 +112,7 @@ export async function uploadDocumentAction(formData: FormData) {
       fileUrl: url,
       extractedData: validationResult.extractedData,
       validationStatus: validationResult.status,
-      validationNotes: validationResult.notes.join(" "),
+      validationNotes: validationResult.notes,
     },
   });
 

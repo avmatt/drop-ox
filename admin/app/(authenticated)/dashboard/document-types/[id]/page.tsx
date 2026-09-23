@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 
 import { Breadcrumbs, Card, ConfirmationDialog } from "ox-ui";
+import { DocumentTypeForm } from "@/app/(authenticated)/dashboard/components/DocumentTypeForm";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
-import { DocumentTypeForm } from "../../components/DocumentTypeForm";
 import { deleteDocumentTypeAction, updateDocumentTypeAction } from "../actions";
 
 function toStringArray(value: unknown) {
