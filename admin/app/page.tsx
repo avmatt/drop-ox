@@ -11,7 +11,7 @@ export default async function Home() {
   });
 
   if (session) {
-    redirect(Route.Dashboard);
+    redirect(Route.Dashboard.path);
   }
 
   return (
@@ -30,7 +30,7 @@ export default async function Home() {
         <div className="flex flex-col items-start gap-4">
           <Link
             className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800"
-            href={Route.SignIn}
+            href={Route.SignIn.path}
           >
             Sign in
           </Link>

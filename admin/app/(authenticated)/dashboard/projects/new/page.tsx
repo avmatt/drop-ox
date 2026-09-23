@@ -8,15 +8,25 @@ export default function NewProjectPage() {
     <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: "Dashboard", href: Route.Dashboard },
-          { label: "Projects", href: Route.Projects },
+          Route.Dashboard,
+          Route.Projects,
           { label: "New" },
         ]}
       />
 
+      <header>
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
+          Portfolio
+        </p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
+          New Project
+        </h1>
+        <p className="mt-2 text-sm text-zinc-600">
+          Add a new project definition for delivery planning and tracking.
+        </p>
+      </header>
+
       <ProjectForm
-        title="Create Project"
-        description="Add a new project definition for delivery planning and tracking."
         submitLabel="Create Project"
         action={createProjectAction}
       />

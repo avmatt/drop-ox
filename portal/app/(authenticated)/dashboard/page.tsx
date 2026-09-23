@@ -1,10 +1,16 @@
 import { headers } from "next/headers";
+import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import {
-  Breadcrumbs,
+  Button,
   Card,
-  CardDescription,
   CardHeader,
-  CardTitle,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
+  Text,
 } from "ox-ui";
 
 import { auth } from "@/lib/auth/auth";
@@ -22,20 +28,57 @@ function formatDate(value: Date) {
   }).format(value);
 }
 
+function toValidationNotes(value: unknown) {
+  if (Array.isArray(value)) {
+    return value.filter(
+      (item): item is string => typeof item === "string" && item.length > 0,
+    );
+  }
+
+  if (typeof value === "string" && value.trim().length > 0) {
+    return [value.trim()];
+  }
+
+  return [];
+}
+
+function toStringArray(value: unknown) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter((item): item is string => typeof item === "string")
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
+}
+
+function toAcceptedExtensions(value: unknown) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter((item): item is string => typeof item === "string")
+    .map((item) => item.trim().toLowerCase())
+    .filter((item) => item.length > 0)
+    .map((item) => (item.startsWith(".") ? item : `.${item}`));
+}
+
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   if (!session) {
-    redirect(Route.SignIn);
+    redirect(Route.SignIn.path);
   }
 
   const documentRequests = await db.documentRequest.findMany({
     where: {
       recipientEmail: session.user.email,
       status: {
-        notIn: ["COMPLETED", "CANCELLED"],
+        notIn: ["DRAFT", "COMPLETED", "CANCELLED"],
       },
     },
     orderBy: [{ updatedAt: "desc" }],
@@ -53,6 +96,10 @@ export default async function DashboardPage() {
               id: true,
               name: true,
               kind: true,
+              requiredFields: true,
+              acceptedFileTypes: true,
+              acceptedFileExtensions: true,
+              maxFileSizeMb: true,
             },
           },
           documents: {
@@ -66,6 +113,7 @@ export default async function DashboardPage() {
               fileUrl: true,
               validationStatus: true,
               validationNotes: true,
+              extractedData: true,
               createdAt: true,
             },
           },
@@ -76,200 +124,294 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: "Dashboard", href: Route.Dashboard }]} />
-
       <header>
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
-          Overview
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
-          Portal Dashboard
-        </h1>
-        <p className="mt-2 text-zinc-600">
-          This is the starting point for client-facing workflows.
-        </p>
+        <Text variant="secondary" size="xs">
+          Requests
+        </Text>
+        <Text variant="primary" size="3xl" as="h1">
+          My Document Requests
+        </Text>
+        <p>Review and manage your pending document requests.</p>
       </header>
 
-      <Card>
-        <CardHeader>
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
-            Requests
-          </p>
-          <CardTitle className="mt-2">My Document Requests</CardTitle>
-          <CardDescription>
-            Review your document request progress.
-          </CardDescription>
-        </CardHeader>
+      {documentRequests.map((request) => (
+        <Card key={request.id}>
+          <CardHeader className="w-full flex justify-between border-b border-zinc-200">
+            <div className="pb-4">
+              <Text variant="secondary" size="xs">
+                {request.project.code}
+              </Text>
+              <Text variant="primary" size="2xl" as="h2">
+                {request.project.name}
+              </Text>
+            </div>
+          </CardHeader>
 
-        <div className="mt-6 space-y-4">
-          {documentRequests.length === 0 ? (
-            <p className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-600">
-              No document requests found for your account.
-            </p>
-          ) : (
-            documentRequests.map((request) => (
-              <article
-                key={request.id}
-                className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"
-              >
-                <div className="flex flex-col gap-3 border-b border-zinc-200 pb-3 md:flex-row md:items-center md:justify-between">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
-                      {request.project.code}
-                    </p>
-                    <h3 className="mt-1 text-lg font-semibold text-zinc-900">
-                      {request.project.name}
-                    </h3>
-                  </div>
+          <dl className="mt-4 grid gap-3 grid-cols-2">
+            <div>
+              <dt>
+                <Text variant="secondary" size="xs">
+                  Recipient
+                </Text>
+              </dt>
+              <dd>
+                <div>{request.recipientName}</div>
+                <div>{request.recipientEmail}</div>
+              </dd>
+            </div>
+            <div>
+              <dt>
+                <Text variant="secondary" size="xs">
+                  Updated
+                </Text>
+              </dt>
+              <dd>
+                <div>{formatDate(request.updatedAt)}</div>
+              </dd>
+            </div>
+          </dl>
 
-                  <span className="inline-flex w-fit items-center rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700">
-                    {request.status}
-                  </span>
-                </div>
+          <div className="mt-5">
+            <div className="overflow-x-auto rounded-xl border border-zinc-200">
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableHeaderCell>Document</TableHeaderCell>
+                    <TableHeaderCell>Requirements</TableHeaderCell>
+                    <TableHeaderCell>Status</TableHeaderCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {request.requestedDocumentTypes.map((item) => {
+                    const existingDocument = item.documents.find(
+                      (doc) => doc.validationStatus !== "INVALID",
+                    );
+                    const existingValidationNotes = toValidationNotes(
+                      existingDocument?.validationNotes,
+                    );
+                    const existingExtractedContent =
+                      typeof existingDocument?.extractedData === "string"
+                        ? existingDocument.extractedData.trim()
+                        : "";
+                    const failedDocument = item.documents.find(
+                      (doc) => doc.validationStatus === "INVALID",
+                    );
+                    const failedValidationNotes = toValidationNotes(
+                      failedDocument?.validationNotes,
+                    );
+                    const failedExtractedContent =
+                      typeof failedDocument?.extractedData === "string"
+                        ? failedDocument.extractedData.trim()
+                        : "";
+                    const acceptedExtensions = toAcceptedExtensions(
+                      item.documentType.acceptedFileExtensions,
+                    );
+                    const acceptedFileTypes = toStringArray(
+                      item.documentType.acceptedFileTypes,
+                    );
+                    const requiredFields = toStringArray(
+                      item.documentType.requiredFields,
+                    );
+                    const acceptValue = acceptedExtensions.join(",");
+                    const canUpload = !existingDocument;
 
-                <dl className="mt-4 grid gap-3 text-sm text-zinc-600 sm:grid-cols-2">
-                  <div>
-                    <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
-                      Recipient
-                    </dt>
-                    <dd className="mt-1 text-zinc-900">
-                      {request.recipientName || request.recipientEmail}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
-                      Updated
-                    </dt>
-                    <dd className="mt-1 text-zinc-900">
-                      {formatDate(request.updatedAt)}
-                    </dd>
-                  </div>
-                </dl>
+                    return (
+                      <TableRow key={item.id}>
+                        <TableCell className="text-zinc-900 align-top">
+                          {item.documentType.name}
+                          <Text variant="secondary" size="xs">
+                            {item.documentType.kind}
+                          </Text>
+                        </TableCell>
+                        <TableCell className="align-top">
+                          <div className="flex-1 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-xs text-zinc-700 sm:mr-auto sm:max-w-xl">
+                            <p className="font-semibold text-zinc-900">
+                              Upload requirements
+                            </p>
+                            <ul className="mt-1 list-disc space-y-1 pl-4">
+                              <li>
+                                Maximum file size:{" "}
+                                {item.documentType.maxFileSizeMb}MB
+                              </li>
+                              {acceptedExtensions.length > 0 ? (
+                                <li>
+                                  Allowed extensions:{" "}
+                                  {acceptedExtensions.join(", ")}
+                                </li>
+                              ) : null}
+                              {requiredFields.length > 0 ? (
+                                <li>
+                                  Required fields: {requiredFields.join(", ")}
+                                </li>
+                              ) : null}
+                            </ul>
+                          </div>
+                        </TableCell>
+                        <TableCell className="align-top">
+                          {existingDocument ? (
+                            <div className="flex flex-col gap-2">
+                              <div className="rounded-lg border border-zinc-300 bg-zinc-100 p-2 text-xs text-zinc-700">
+                                <p className="text-sm font-bold text-zinc-900">
+                                  Uploaded file
+                                </p>
+                                <div className="mt-1 flex flex-wrap items-center gap-2 justify-between">
+                                  <a
+                                    href={existingDocument.fileUrl ?? undefined}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className={
+                                      existingDocument.fileUrl
+                                        ? "text-blue-600 underline"
+                                        : "text-zinc-900"
+                                    }
+                                  >
+                                    {existingDocument.fileName}
+                                  </a>
 
-                <div className="mt-5">
-                  <div className="overflow-x-auto rounded-xl border border-zinc-200">
-                    <table className="min-w-full divide-y divide-zinc-200 text-left text-sm">
-                      <thead className="bg-zinc-50">
-                        <tr>
-                          <th className="px-3 py-2 font-semibold text-zinc-700">
-                            Document
-                          </th>
-                          <th className="px-3 py-2 font-semibold text-zinc-700">
-                            Kind
-                          </th>
-                          <th className="px-3 py-2 font-semibold text-zinc-700">
-                            Status
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-zinc-200 bg-white">
-                        {request.requestedDocumentTypes.map((item) => {
-                          const existingDocument = item.documents.find(
-                            (doc) => doc.validationStatus !== "INVALID",
-                          );
-                          const failedDocument = item.documents.find(
-                            (doc) => doc.validationStatus === "INVALID",
-                          );
-                          const canUpload = !existingDocument;
-
-                          return (
-                            <tr key={item.id}>
-                              <td className="px-3 py-2 text-zinc-900">
-                                {item.documentType.name}
-                              </td>
-                              <td className="px-3 py-2 text-zinc-700">
-                                {item.documentType.kind}
-                              </td>
-                              <td className="px-3 py-2">
-                                {existingDocument ? (
-                                  <div className="flex flex-col gap-1">
-                                    <a
-                                      href={
-                                        existingDocument.fileUrl ?? undefined
-                                      }
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className={
-                                        existingDocument.fileUrl
-                                          ? "text-blue-600 underline"
-                                          : "text-zinc-900"
-                                      }
+                                  {existingDocument.fileUrl ? (
+                                    <Button
+                                      as="a"
+                                      href={existingDocument.fileUrl}
+                                      download={existingDocument.fileName}
+                                      variant="primary"
+                                      size="sm"
+                                      className="inline-flex items-center gap-1 px-2 py-1 text-xs"
                                     >
-                                      {existingDocument.fileName}
-                                    </a>
-                                    <span className="text-xs text-zinc-600">
-                                      Status:{" "}
-                                      {existingDocument.validationStatus}
-                                    </span>
+                                      <ArrowDownTrayIcon className="h-4 w-4" />
+                                    </Button>
+                                  ) : null}
+                                </div>
+                              </div>
+
+                              {existingDocument.validationStatus === "VALID" &&
+                              existingValidationNotes.length > 0 ? (
+                                <>
+                                  <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-2 text-xs text-emerald-700">
+                                    <p className="text-sm font-bold">
+                                      Validation passed
+                                    </p>
+                                    <ul className="mt-1 list-disc space-y-1 pl-4">
+                                      {existingValidationNotes.map(
+                                        (note, index) => (
+                                          <li
+                                            key={`${existingDocument.id}-note-${index}`}
+                                          >
+                                            {note}
+                                          </li>
+                                        ),
+                                      )}
+                                    </ul>
                                   </div>
-                                ) : (
-                                  <div className="space-y-2">
-                                    {failedDocument ? (
-                                      <div className="rounded-lg border border-red-200 bg-red-50 p-2 text-xs text-red-700">
-                                        <p className="font-medium">Last upload failed validation.</p>
-                                        <p>
-                                          File: {failedDocument.fileName}
-                                        </p>
-                                        {failedDocument.validationNotes ? (
-                                          <p className="mt-1">{failedDocument.validationNotes}</p>
-                                        ) : null}
-                                      </div>
+
+                                  {/* <details className="rounded-md border border-zinc-200 bg-zinc-50 p-2">
+                                    <summary className="cursor-pointer text-xs font-medium text-zinc-700">
+                                      View extracted content
+                                    </summary>
+                                    <div className="mt-2 max-h-64 overflow-auto rounded bg-white p-2">
+                                      <pre className="whitespace-pre-wrap break-words text-xs text-zinc-700">
+                                        {existingExtractedContent.length > 0
+                                          ? existingExtractedContent
+                                          : "No extracted content available."}
+                                      </pre>
+                                    </div>
+                                  </details> */}
+                                </>
+                              ) : null}
+                            </div>
+                          ) : (
+                            <div className="space-y-2">
+                              {failedDocument ? (
+                                <>
+                                  <div className="rounded-lg border border-red-200 bg-red-50 p-2 text-xs text-red-700">
+                                    <p className="text-sm font-bold">
+                                      Validation failed
+                                    </p>
+
+                                    {failedValidationNotes.length > 0 ? (
+                                      <ul className="mt-1 list-disc space-y-1 pl-4">
+                                        {failedValidationNotes.map(
+                                          (note, index) => (
+                                            <li
+                                              key={`${failedDocument.id}-note-${index}`}
+                                            >
+                                              {note}
+                                            </li>
+                                          ),
+                                        )}
+                                      </ul>
                                     ) : null}
-
-                                    <form
-                                      action={uploadDocumentAction}
-                                      className="flex flex-col gap-2 sm:flex-row"
-                                    >
-                                      <input
-                                        type="hidden"
-                                        name="projectId"
-                                        value={request.projectId}
-                                      />
-                                      <input
-                                        type="hidden"
-                                        name="documentRequestId"
-                                        value={request.id}
-                                      />
-                                      <input
-                                        type="hidden"
-                                        name="documentRequestDocumentTypeId"
-                                        value={item.id}
-                                      />
-                                      <input
-                                        type="hidden"
-                                        name="documentTypeId"
-                                        value={item.documentTypeId}
-                                      />
-                                      <input
-                                        type="file"
-                                        name="file"
-                                        accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
-                                        required
-                                        className="block w-full max-w-xs text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-zinc-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
-                                      />
-                                      <button
-                                        type="submit"
-                                        className="rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-400"
-                                        disabled={!canUpload}
-                                      >
-                                        Submit
-                                      </button>
-                                    </form>
                                   </div>
-                                )}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </article>
-            ))
-          )}
-        </div>
-      </Card>
+
+                                  {/* <details className="rounded-md border border-zinc-200 bg-zinc-50 p-2">
+                                    <summary className="cursor-pointer text-xs font-medium text-zinc-700">
+                                      View extracted content
+                                    </summary>
+                                    <div className="mt-2 max-h-64 overflow-auto rounded bg-white p-2">
+                                      <pre className="whitespace-pre-wrap break-words text-xs text-zinc-700">
+                                        {failedExtractedContent.length > 0
+                                          ? failedExtractedContent
+                                          : "No extracted content available."}
+                                      </pre>
+                                    </div>
+                                  </details> */}
+                                </>
+                              ) : null}
+
+                              <form
+                                action={uploadDocumentAction}
+                                className="flex flex-col gap-2 sm:flex-row justify-between"
+                              >
+                                <input
+                                  type="hidden"
+                                  name="projectId"
+                                  value={request.projectId}
+                                />
+                                <input
+                                  type="hidden"
+                                  name="documentRequestId"
+                                  value={request.id}
+                                />
+                                <input
+                                  type="hidden"
+                                  name="documentRequestDocumentTypeId"
+                                  value={item.id}
+                                />
+                                <input
+                                  type="hidden"
+                                  name="documentTypeId"
+                                  value={item.documentTypeId}
+                                />
+                                <input
+                                  type="file"
+                                  name="file"
+                                  accept={
+                                    acceptValue.length > 0
+                                      ? acceptValue
+                                      : undefined
+                                  }
+                                  required
+                                  className="block w-full max-w-xs text-sm text-zinc-600 file:mr-3 file:rounded-full file:font-semibold file:border-0 file:bg-zinc-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white file:cursor-pointer"
+                                />
+                                <Button
+                                  type="submit"
+                                  size="sm"
+                                  disabled={!canUpload}
+                                >
+                                  Submit
+                                </Button>
+                              </form>
+                            </div>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </Card>
+      ))}
     </div>
   );
 }

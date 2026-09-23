@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source "node_modules/ox-ui/dist";
+@source "../../ox-ui/src";
 
 :root {
   --background: #ffffff;
@@ -11,6 +11,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-solar-orange: #ff7b34;
+  --color-solar-yellow: #ffca21;
+  --color-solar-blue: #3cabd8;
+  --color-solar-gray: #535d5c;
+  --color-solar-green: #008f7f;
 }
 
 @media (prefers-color-scheme: dark) {

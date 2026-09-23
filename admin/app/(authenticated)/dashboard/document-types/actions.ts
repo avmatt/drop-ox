@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db/db";
-import { setToastCookie } from "@/lib/toast";
 
 function getRequiredText(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -18,30 +17,61 @@ function getRequiredText(formData: FormData, key: string) {
 
 function parseStringList(value: string) {
   return value
-    .split(/\r?\n|,/)
+    .split(/\r?\n/)
     .map((item) => item.trim())
     .filter((item) => item.length > 0);
 }
 
+function getOptionalText(formData: FormData, key: string) {
+  const value = formData.get(key);
+
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  return value.trim();
+}
+
+function getRequiredPositiveInt(formData: FormData, key: string) {
+  const value = getRequiredText(formData, key);
+  const parsed = Number.parseInt(value, 10);
+
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    throw new Error(`${key} must be a positive number`);
+  }
+
+  return parsed;
+}
+
 function getPayload(formData: FormData) {
+  const useAi = formData.get("useAi") === "on";
+
   return {
     kind: getRequiredText(formData, "kind"),
     name: getRequiredText(formData, "name"),
     description: getRequiredText(formData, "description"),
     summary: getRequiredText(formData, "summary"),
     validationNotes: getRequiredText(formData, "validationNotes"),
-    structureHints: parseStringList(
-      getRequiredText(formData, "structureHints"),
-    ),
+    structureHints: useAi
+      ? parseStringList(getOptionalText(formData, "structureHints"))
+      : [],
     requiredFields: parseStringList(
       getRequiredText(formData, "requiredFields"),
     ),
-    validationRules: parseStringList(
-      getRequiredText(formData, "validationRules"),
+    validationRules: useAi
+      ? parseStringList(getOptionalText(formData, "validationRules"))
+      : [],
+    sampleKeywords: useAi
+      ? parseStringList(getOptionalText(formData, "sampleKeywords"))
+      : [],
+    acceptedFileTypes: parseStringList(
+      getRequiredText(formData, "acceptedFileTypes"),
     ),
-    sampleKeywords: parseStringList(
-      getRequiredText(formData, "sampleKeywords"),
+    acceptedFileExtensions: parseStringList(
+      getRequiredText(formData, "acceptedFileExtensions"),
     ),
+    maxFileSizeMb: getRequiredPositiveInt(formData, "maxFileSizeMb"),
+    useAi,
   };
 }
 
@@ -58,10 +88,6 @@ export async function createDocumentTypeAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/document-types");
   revalidatePath(`/dashboard/document-types/${created.id}`);
-  await setToastCookie({
-    title: "Document type created",
-    message: "The document type was created successfully.",
-  });
 
   redirect(`/dashboard/document-types/${created.id}`);
 }
@@ -82,10 +108,6 @@ export async function updateDocumentTypeAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath(`/dashboard/document-types`);
   revalidatePath(`/dashboard/document-types/${id}`);
-  await setToastCookie({
-    title: "Document type saved",
-    message: "Your document type changes were saved.",
-  });
 
   redirect(`/dashboard/document-types/${id}`);
 }
@@ -99,9 +121,5 @@ export async function deleteDocumentTypeAction(formData: FormData) {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/document-types");
-  await setToastCookie({
-    title: "Document type deleted",
-    message: "The document type was deleted successfully.",
-  });
   redirect("/dashboard/document-types");
 }

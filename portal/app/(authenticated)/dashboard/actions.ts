@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db/db";
 import { uploadDocumentToAzure } from "@/lib/storage/azure";
 import { extractTextFromFile } from "@/lib/validation/extractor";
+import { validateDocumentWithAzureOpenAi } from "@/lib/validation/openai-validator";
 import { validateDocumentAgainstType } from "@/lib/validation/validator";
 
 function toStringArray(value: unknown) {
@@ -78,6 +79,11 @@ export async function uploadDocumentAction(formData: FormData) {
       kind: true,
       name: true,
       requiredFields: true,
+      structureHints: true,
+      acceptedFileTypes: true,
+      acceptedFileExtensions: true,
+      maxFileSizeMb: true,
+      useAi: true,
       validationRules: true,
       sampleKeywords: true,
     },
@@ -93,6 +99,9 @@ export async function uploadDocumentAction(formData: FormData) {
     {
       name: documentType.name,
       requiredFields: toStringArray(documentType.requiredFields),
+      acceptedFileTypes: toStringArray(documentType.acceptedFileTypes),
+      acceptedFileExtensions: toStringArray(documentType.acceptedFileExtensions),
+      maxFileSizeMb: documentType.maxFileSizeMb,
     },
     {
       name: file.name,
@@ -101,6 +110,38 @@ export async function uploadDocumentAction(formData: FormData) {
       text: extractedText,
     },
   );
+
+  let finalStatus = validationResult.status;
+  const finalNotes = [...validationResult.notes];
+  let finalValidationScore: number | null = null;
+
+  if (documentType.useAi) {
+    try {
+      const aiResult = await validateDocumentWithAzureOpenAi(
+        validationResult.extractedData,
+        {
+          kind: documentType.kind,
+          name: documentType.name,
+          requiredFields: toStringArray(documentType.requiredFields),
+          validationRules: toStringArray(documentType.validationRules),
+          structureHints: toStringArray(documentType.structureHints),
+          sampleKeywords: toStringArray(documentType.sampleKeywords),
+        },
+      );
+
+      finalNotes.push(...aiResult.notes);
+      finalValidationScore = aiResult.score;
+
+      if (!aiResult.isValid) {
+        finalStatus = "INVALID";
+      }
+    } catch (error) {
+      finalStatus = "INVALID";
+      finalNotes.push(
+        `AI validation failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
+    }
+  }
 
   await db.document.create({
     data: {
@@ -111,8 +152,9 @@ export async function uploadDocumentAction(formData: FormData) {
       fileName: file.name,
       fileUrl: url,
       extractedData: validationResult.extractedData,
-      validationStatus: validationResult.status,
-      validationNotes: validationResult.notes.join(" "),
+      validationStatus: finalStatus,
+      validationScore: finalValidationScore,
+      validationNotes: finalNotes,
     },
   });
 

@@ -9,7 +9,7 @@ export async function proxy(request: NextRequest) {
   });
 
   if (!session) {
-    return NextResponse.redirect(new URL(Route.SignIn, request.url));
+    return NextResponse.redirect(new URL(Route.SignIn.path, request.url));
   }
 
   return NextResponse.next();

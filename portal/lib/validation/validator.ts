@@ -1,6 +1,9 @@
 export type DocumentType = {
   name: string;
   requiredFields: string[];
+  acceptedFileTypes: string[];
+  acceptedFileExtensions: string[];
+  maxFileSizeMb: number;
 };
 
 export type DocumentValidationResult = {
@@ -9,22 +12,12 @@ export type DocumentValidationResult = {
   extractedData: string;
 };
 
-const acceptedMimeTypes = new Set([
-  "application/pdf",
-  "image/png",
-  "image/jpeg",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-]);
-
-const acceptedExtensions = new Set([
-  "pdf",
-  "png",
-  "jpg",
-  "jpeg",
-  "doc",
-  "docx",
-]);
+function normalizeFileExtensions(extensions: string[]) {
+  return extensions
+    .map((extension) => extension.trim().toLowerCase())
+    .filter((extension) => extension.length > 0)
+    .map((extension) => (extension.startsWith(".") ? extension.slice(1) : extension));
+}
 
 export function validateDocumentAgainstType(
   definition: DocumentType,
@@ -43,13 +36,27 @@ export function validateDocumentAgainstType(
     ? (fileName.split(".").pop()?.toLowerCase() ?? "")
     : "";
 
+  const acceptedMimeTypes = new Set(
+    definition.acceptedFileTypes
+      .map((mimeType) => mimeType.trim().toLowerCase())
+      .filter((mimeType) => mimeType.length > 0),
+  );
+  const acceptedExtensions = new Set(
+    normalizeFileExtensions(definition.acceptedFileExtensions),
+  );
+  const maxFileSizeBytes = Math.max(definition.maxFileSizeMb, 1) * 1024 * 1024;
+
   const isSupportedFileType =
     acceptedMimeTypes.has(fileType) || acceptedExtensions.has(fileExtension);
-  const isWithinSizeLimit = fileSize > 0 && fileSize <= 10 * 1024 * 1024;
+  const isWithinSizeLimit = fileSize > 0 && fileSize <= maxFileSizeBytes;
 
   const requiredFields = definition.requiredFields;
+  const lowerCaseExtractedData = extractedData.toLowerCase();
   const presentRequiredFields = requiredFields.filter((fieldName) =>
-    extractedData.includes(fieldName),
+    lowerCaseExtractedData.includes(fieldName.toLowerCase()),
+  );
+  const missingRequiredFields = requiredFields.filter(
+    (fieldName) => !presentRequiredFields.includes(fieldName),
   );
 
   let status: DocumentValidationResult["status"] = "VALID";
@@ -66,21 +73,38 @@ export function validateDocumentAgainstType(
   }
 
   if (isWithinSizeLimit) {
-    notes.push("The file is within the 10MB upload limit.");
+    notes.push(`The file is within the ${definition.maxFileSizeMb}MB upload limit.`);
   } else {
-    notes.push("The file exceeds the 10MB upload limit.");
+    notes.push(`The file exceeds the ${definition.maxFileSizeMb}MB upload limit.`);
     status = "INVALID";
   }
 
+  notes.push(`Extracted text length: ${extractedData.trim().length} characters.`);
+
+  if (extractedData.trim().length === 0) {
+    notes.push(
+      "No machine-readable text was extracted from this file. The document may be image-only or low quality.",
+    );
+  }
+
   if (requiredFields.length > 0) {
-    if (presentRequiredFields.length > 0) {
-      notes.push(
-        `Required field validation: ${presentRequiredFields.length}/${requiredFields.length} fields were found in the uploaded document.`,
-      );
-    } else {
-      notes.push("No required fields were found in the uploaded document.");
-    }
-    if (presentRequiredFields.length < requiredFields.length) {
+    notes.push(
+      `Required field validation: ${presentRequiredFields.length}/${requiredFields.length} fields were found in the uploaded document.`,
+    );
+
+    notes.push(
+      presentRequiredFields.length > 0
+        ? `Fields found: ${presentRequiredFields.join(", ")}.`
+        : "Fields found: none.",
+    );
+
+    notes.push(
+      missingRequiredFields.length > 0
+        ? `Fields not found: ${missingRequiredFields.join(", ")}.`
+        : "Fields not found: none.",
+    );
+
+    if (missingRequiredFields.length > 0) {
       status = "INVALID";
     }
   }

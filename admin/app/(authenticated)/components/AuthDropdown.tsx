@@ -2,7 +2,6 @@
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import { authClient } from "@/lib/auth/auth-client";
 import { Route } from "@/lib/routes";
@@ -14,28 +13,21 @@ type AuthDropdownProps = {
 
 export function AuthDropdown({ email, name }: AuthDropdownProps) {
   const router = useRouter();
-  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const displayName = name && name.trim().length > 0 ? name : email;
-  const initial = displayName[0]?.toUpperCase() ?? "U";
+  const initials = displayName.split(" ").map((n) => n[0]?.toUpperCase() ?? "").join("");
 
   const handleSignOut = async () => {
-    setIsSigningOut(true);
-
-    try {
-      await authClient.signOut();
-      router.push(Route.Home);
-      router.refresh();
-    } finally {
-      setIsSigningOut(false);
-    }
+    await authClient.signOut();
+    router.push(Route.Home.path);
+    router.refresh();
   };
 
   return (
     <Menu as="div" className="relative">
-      <MenuButton className="flex items-center gap-3 rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-left transition hover:bg-zinc-100">
+      <MenuButton className="flex items-center gap-3 rounded-full border border-zinc-300 bg-white pl-2 pr-3 py-1.5 text-left transition hover:bg-zinc-100 cursor-pointer">
         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-sm font-semibold text-white">
-          {initial}
+          {initials}
         </span>
         <span className="hidden pr-1 text-sm font-medium text-zinc-800 sm:inline">
           {displayName}
@@ -52,19 +44,15 @@ export function AuthDropdown({ email, name }: AuthDropdownProps) {
         </div>
 
         <MenuItem>
-          {({ close }) => (
-            <button
-              type="button"
-              onClick={async () => {
-                close();
-                await handleSignOut();
-              }}
-              disabled={isSigningOut}
-              className="mt-2 w-full rounded-lg px-3 py-2 text-left text-sm font-semibold text-zinc-800 transition data-[focus]:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isSigningOut ? "Signing out..." : "Sign out"}
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={async () => {
+              await handleSignOut();
+            }}
+            className="mt-2 w-full rounded-lg px-3 py-2 text-left text-sm font-semibold text-zinc-800 transition data-[focus]:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+          >
+            Sign out
+          </button>
         </MenuItem>
       </MenuItems>
     </Menu>

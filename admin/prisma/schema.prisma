@@ -40,6 +40,10 @@ model DocumentType {
   validationRules   Json
   validationNotes   String
   sampleKeywords    Json
+  acceptedFileTypes Json              @default("[\"application/pdf\",\"image/png\",\"image/jpeg\"]")
+  acceptedFileExtensions Json          @default("[\".pdf\",\".png\",\".jpg\",\".jpeg\"]")
+  maxFileSizeMb     Int               @default(10)
+  useAi             Boolean           @default(true)
   isActive          Boolean           @default(true)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
@@ -109,7 +113,7 @@ model Document {
   extractedData              Json?
   validationStatus           ValidationStatus           @default(PENDING)
   validationScore            Int?
-  validationNotes            String?
+  validationNotes            Json?
   createdAt                  DateTime                   @default(now())
   updatedAt                  DateTime                   @updatedAt
   project                    Project                    @relation(fields: [projectId], references: [id], onDelete: Cascade)

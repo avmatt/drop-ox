@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-import { Breadcrumbs } from "ox-ui";
-import { buttonClasses } from "ox-ui";
+import { Breadcrumbs, Button } from "ox-ui";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
 import { DocumentTypeTable } from "../components/DocumentTypeTable";
@@ -13,7 +12,7 @@ export default async function DocumentTypesPage() {
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: "Dashboard", href: Route.Dashboard }, { label: "Document Types" }]} />
+      <Breadcrumbs items={[Route.Dashboard, Route.DocumentTypes]} />
 
       <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -28,12 +27,9 @@ export default async function DocumentTypesPage() {
           </p>
         </div>
 
-        <Link
-          href={`${Route.DocumentTypes}/new`}
-          className={buttonClasses({ size: "sm" })}
-        >
+        <Button as={Link} href={`${Route.DocumentTypes.path}/new`} size="sm">
           New document type
-        </Link>
+        </Button>
       </header>
 
       <DocumentTypeTable

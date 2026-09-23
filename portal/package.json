@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
+    "ui:refresh": "rm -rf node_modules/ox-ui && npm install ox-ui@file:../ox-ui --install-links --force",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "lint": "eslint"
@@ -13,12 +14,14 @@
   "dependencies": {
     "@azure/storage-blob": "^12.33.0",
     "@headlessui/react": "^2.2.10",
+    "@heroicons/react": "^2.2.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "better-auth": "^1.7.5",
     "mammoth": "^1.12.3",
     "next": "16.3.5",
     "ox-ui": "file:../ox-ui",
+    "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^6.3.289",
     "pg": "^8.23.0",
     "react": "19.2.8",
@@ -28,6 +31,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pdf-parse": "^1.1.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

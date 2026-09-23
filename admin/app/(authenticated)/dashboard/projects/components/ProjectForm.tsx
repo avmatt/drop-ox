@@ -6,6 +6,17 @@ import { useRef, useState } from "react";
 
 import { PROJECT_STATUS_OPTIONS, type ProjectStatus } from "../constants";
 
+function RequiredLabel({ label }: { label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1">
+      <span>{label}</span>
+      <span aria-label="required" className="text-red-500">
+        *
+      </span>
+    </span>
+  );
+}
+
 type ProjectFormValues = {
   id?: string;
   code: string;
@@ -20,8 +31,6 @@ type ProjectFormValues = {
 };
 
 type ProjectFormProps = {
-  title: string;
-  description: string;
   submitLabel?: string;
   values?: ProjectFormValues;
   action: (formData: FormData) => Promise<void>;
@@ -42,8 +51,6 @@ const EMPTY_VALUES: ProjectFormValues = {
 };
 
 export function ProjectForm({
-  title,
-  description,
   submitLabel = "Save changes",
   values,
   action,
@@ -66,12 +73,7 @@ export function ProjectForm({
   return (
     <Card>
       <form ref={formRef} action={action} className="space-y-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight text-zinc-900">{title}</h2>
-            <p className="mt-2 text-sm text-zinc-600">{description}</p>
-          </div>
-
+        <div className="flex items-start justify-end -mb-2">
           {readOnlyUntilEdit && !isEditing ? (
             <Button
               type="button"
@@ -93,16 +95,20 @@ export function ProjectForm({
                   Cancel
                 </Button>
               ) : null}
-              <Button type="submit">{submitLabel}</Button>
+              <Button type="submit" size="sm">
+                {submitLabel}
+              </Button>
             </div>
           )}
         </div>
 
-        {initial.id ? <input type="hidden" name="id" value={initial.id} /> : null}
+        {initial.id ? (
+          <input type="hidden" name="id" value={initial.id} />
+        ) : null}
 
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            Project code
+            <RequiredLabel label="Project code" />
             <input
               name="code"
               required
@@ -113,7 +119,7 @@ export function ProjectForm({
           </label>
 
           <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            Project name
+            <RequiredLabel label="Project name" />
             <input
               name="name"
               required
@@ -126,7 +132,7 @@ export function ProjectForm({
 
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            Client
+            <RequiredLabel label="Client" />
             <input
               name="client"
               required
@@ -137,7 +143,7 @@ export function ProjectForm({
           </label>
 
           <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            Status
+            <RequiredLabel label="Status" />
             <select
               name="status"
               required
@@ -155,7 +161,7 @@ export function ProjectForm({
         </div>
 
         <label className="flex flex-col gap-2 text-sm text-zinc-700">
-          Summary
+          <RequiredLabel label="Summary" />
           <input
             name="summary"
             required
@@ -166,7 +172,7 @@ export function ProjectForm({
         </label>
 
         <label className="flex flex-col gap-2 text-sm text-zinc-700">
-          Description
+          <RequiredLabel label="Description" />
           <textarea
             name="description"
             required
@@ -179,7 +185,7 @@ export function ProjectForm({
 
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            Start date
+            <RequiredLabel label="Start date" />
             <input
               type="date"
               name="startDate"

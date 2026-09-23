@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 
 import { Breadcrumbs, Card, ConfirmationDialog } from "ox-ui";
+import { DocumentTypeForm } from "@/app/(authenticated)/dashboard/components/DocumentTypeForm";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
-import { DocumentTypeForm } from "../../components/DocumentTypeForm";
 import { deleteDocumentTypeAction, updateDocumentTypeAction } from "../actions";
 
 function toStringArray(value: unknown) {
@@ -18,7 +18,9 @@ type DocumentTypeDetailsPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDetailsPageProps) {
+export default async function DocumentTypeDetailsPage({
+  params,
+}: DocumentTypeDetailsPageProps) {
   const { id } = await params;
   const documentType = await db.documentType.findUnique({
     where: { id },
@@ -32,15 +34,25 @@ export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDe
     <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: "Dashboard", href: Route.Dashboard },
-          { label: "Document Types", href: Route.DocumentTypes },
-          { label: documentType.name },
+          Route.Dashboard,
+          Route.DocumentTypes,
+          { label: "Document Type Details" },
         ]}
       />
 
+      <header>
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
+          Configuration
+        </p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
+          Document Type Details
+        </h1>
+        <p className="mt-2 text-sm text-zinc-600">
+          Review and update this document type configuration.
+        </p>
+      </header>
+
       <DocumentTypeForm
-        title="Document Type Details"
-        description="Review and edit this document type configuration."
         submitLabel="Save Changes"
         includeIsActive
         readOnlyUntilEdit
@@ -56,6 +68,10 @@ export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDe
           requiredFields: toStringArray(documentType.requiredFields),
           validationRules: toStringArray(documentType.validationRules),
           sampleKeywords: toStringArray(documentType.sampleKeywords),
+          acceptedFileTypes: toStringArray(documentType.acceptedFileTypes),
+          acceptedFileExtensions: toStringArray(documentType.acceptedFileExtensions),
+          maxFileSizeMb: documentType.maxFileSizeMb,
+          useAi: documentType.useAi,
           isActive: documentType.isActive,
         }}
       />

@@ -26,7 +26,11 @@
       "Certificate holder name must match project record when configured"
     ],
     "validationNotes": "COIs are usually valid when the insurer, policy number, coverage limits, and dates are present and current.",
-    "sampleKeywords": ["certificate of insurance", "named insured", "policy number", "effective date"]
+    "sampleKeywords": ["certificate of insurance", "named insured", "policy number", "effective date"],
+    "acceptedFileTypes": ["application/pdf", "image/png", "image/jpeg"],
+    "acceptedFileExtensions": [".pdf", ".png", ".jpg", ".jpeg"],
+    "maxFileSizeMb": 10,
+    "useAi": true
   },
   {
     "kind": "LIEN_WAIVER",
@@ -55,7 +59,11 @@
       "Waived amount must match or exceed the associated pay application amount"
     ],
     "validationNotes": "Lien waivers are valid when the waiver type, payment stage, amount, signatures, and exceptions all align with the payment event.",
-    "sampleKeywords": ["lien waiver", "waiver and release", "conditional", "unconditional", "final payment"]
+    "sampleKeywords": ["lien waiver", "waiver and release", "conditional", "unconditional", "final payment"],
+    "acceptedFileTypes": ["application/pdf", "image/png", "image/jpeg"],
+    "acceptedFileExtensions": [".pdf", ".png", ".jpg", ".jpeg"],
+    "maxFileSizeMb": 10,
+    "useAi": true
   },
   {
     "kind": "INVOICE",
@@ -85,7 +93,11 @@
       "Due date must not precede invoice date"
     ],
     "validationNotes": "Invoices are valid when the billing identifiers, line-item math, and payment terms are internally consistent.",
-    "sampleKeywords": ["invoice", "bill to", "due date", "subtotal", "total due"]
+    "sampleKeywords": ["invoice", "bill to", "due date", "subtotal", "total due"],
+    "acceptedFileTypes": ["application/pdf", "image/png", "image/jpeg"],
+    "acceptedFileExtensions": [".pdf", ".png", ".jpg", ".jpeg"],
+    "maxFileSizeMb": 10,
+    "useAi": true
   },
   {
     "kind": "SUBMITTAL",
@@ -114,7 +126,11 @@
       "Attachments must include the referenced cut sheet or shop drawing"
     ],
     "validationNotes": "Submittals are valid when the equipment or product data aligns with the spec section and includes enough technical detail for review.",
-    "sampleKeywords": ["submittal", "shop drawing", "cut sheet", "spec section", "manufacturer"]
+    "sampleKeywords": ["submittal", "shop drawing", "cut sheet", "spec section", "manufacturer"],
+    "acceptedFileTypes": ["application/pdf", "image/png", "image/jpeg"],
+    "acceptedFileExtensions": [".pdf", ".png", ".jpg", ".jpeg"],
+    "maxFileSizeMb": 10,
+    "useAi": true
   },
   {
     "kind": "RFP",
@@ -141,7 +157,11 @@
       "Pricing, schedule, and scope response should be present when required"
     ],
     "validationNotes": "RFPs are valid when the proposal structure is complete and the vendor response matches the requested scope and criteria.",
-    "sampleKeywords": ["request for proposal", "scope of work", "evaluation criteria", "submission deadline"]
+    "sampleKeywords": ["request for proposal", "scope of work", "evaluation criteria", "submission deadline"],
+    "acceptedFileTypes": ["application/pdf", "image/png", "image/jpeg"],
+    "acceptedFileExtensions": [".pdf", ".png", ".jpg", ".jpeg"],
+    "maxFileSizeMb": 10,
+    "useAi": true
   },
   {
     "kind": "RFQ",
@@ -162,6 +182,10 @@
       "Vendor response should reference the same requested quantity or unit"
     ],
     "validationNotes": "RFQs are valid when the quote clearly matches the requested items or services and includes comparable pricing.",
-    "sampleKeywords": ["request for quotation", "quote", "pricing", "specification", "quantity"]
+    "sampleKeywords": ["request for quotation", "quote", "pricing", "specification", "quantity"],
+    "acceptedFileTypes": ["application/pdf", "image/png", "image/jpeg"],
+    "acceptedFileExtensions": [".pdf", ".png", ".jpg", ".jpeg"],
+    "maxFileSizeMb": 10,
+    "useAi": true
   }
 ]

@@ -48,6 +48,10 @@ async function main() {
           validationRules: documentType.validationRules,
           validationNotes: documentType.validationNotes,
           sampleKeywords: documentType.sampleKeywords,
+          acceptedFileTypes: documentType.acceptedFileTypes,
+          acceptedFileExtensions: documentType.acceptedFileExtensions,
+          maxFileSizeMb: documentType.maxFileSizeMb,
+          useAi: documentType.useAi,
           isActive: true,
         },
       });
@@ -66,6 +70,10 @@ async function main() {
         validationRules: documentType.validationRules,
         validationNotes: documentType.validationNotes,
         sampleKeywords: documentType.sampleKeywords,
+        acceptedFileTypes: documentType.acceptedFileTypes,
+        acceptedFileExtensions: documentType.acceptedFileExtensions,
+        maxFileSizeMb: documentType.maxFileSizeMb,
+        useAi: documentType.useAi,
         isActive: true,
       },
     });

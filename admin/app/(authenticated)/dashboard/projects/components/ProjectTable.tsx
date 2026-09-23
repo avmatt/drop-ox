@@ -2,6 +2,15 @@
 
 import { useRouter } from "next/navigation";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
+} from "ox-ui";
+
 import { PROJECT_STATUS_LABELS, type ProjectStatus } from "../constants";
 
 type ProjectTableProps = {
@@ -35,22 +44,22 @@ export function ProjectTable({ projects }: ProjectTableProps) {
   return (
     <section className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-zinc-200 text-left text-sm">
-          <thead className="bg-zinc-50">
-            <tr>
-              <th className="px-4 py-3 font-semibold text-zinc-700">Code</th>
-              <th className="px-4 py-3 font-semibold text-zinc-700">Project</th>
-              <th className="px-4 py-3 font-semibold text-zinc-700">Client</th>
-              <th className="px-4 py-3 font-semibold text-zinc-700">Status</th>
-              <th className="px-4 py-3 font-semibold text-zinc-700">Start Date</th>
-              <th className="px-4 py-3 font-semibold text-zinc-700">Last Updated</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-zinc-200 bg-white">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell>Code</TableHeaderCell>
+              <TableHeaderCell>Project</TableHeaderCell>
+              <TableHeaderCell>Client</TableHeaderCell>
+              <TableHeaderCell>Status</TableHeaderCell>
+              <TableHeaderCell>Start Date</TableHeaderCell>
+              <TableHeaderCell>Last Updated</TableHeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {projects.map((project) => (
-              <tr
+              <TableRow
                 key={project.id}
-                className="cursor-pointer align-middle transition hover:bg-zinc-50 focus-within:bg-zinc-50"
+                className="cursor-pointer transition hover:bg-zinc-50 focus-within:bg-zinc-50"
                 onClick={() => navigateToDetails(project.id)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
@@ -62,18 +71,18 @@ export function ProjectTable({ projects }: ProjectTableProps) {
                 role="link"
                 aria-label={`View ${project.name} details`}
               >
-                <td className="px-4 py-4 font-medium text-zinc-900">{project.code}</td>
-                <td className="px-4 py-4 text-zinc-900">
+                <TableCell className="font-medium text-zinc-900">{project.code}</TableCell>
+                <TableCell className="text-zinc-900">
                   <p className="font-semibold text-zinc-900">{project.name}</p>
-                </td>
-                <td className="px-4 py-4 text-zinc-600">{project.client}</td>
-                <td className="px-4 py-4 text-zinc-600">{PROJECT_STATUS_LABELS[project.status]}</td>
-                <td className="px-4 py-4 text-zinc-600">{formatDate(project.startDate)}</td>
-                <td className="px-4 py-4 text-zinc-600">{formatDate(project.updatedAt)}</td>
-              </tr>
+                </TableCell>
+                <TableCell>{project.client}</TableCell>
+                <TableCell>{PROJECT_STATUS_LABELS[project.status]}</TableCell>
+                <TableCell>{formatDate(project.startDate)}</TableCell>
+                <TableCell>{formatDate(project.updatedAt)}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </section>
   );
