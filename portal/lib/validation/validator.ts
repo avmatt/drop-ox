@@ -78,7 +78,7 @@ export function validateDocumentAgainstType(
         `Required field validation: ${presentRequiredFields.length}/${requiredFields.length} fields were found in the uploaded document.`,
       );
     } else {
-      notes.push("The document type does not contain any required fields.");
+      notes.push("No required fields were found in the uploaded document.");
     }
     if (presentRequiredFields.length < requiredFields.length) {
       status = "INVALID";
