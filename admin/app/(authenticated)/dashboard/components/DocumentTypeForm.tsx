@@ -26,6 +26,9 @@ type DocumentTypeFormValues = {
   requiredFields: string[];
   validationRules: string[];
   sampleKeywords: string[];
+  acceptedFileTypes: string[];
+  maxFileSizeMb: number;
+  useAi: boolean;
   isActive?: boolean;
 };
 
@@ -47,6 +50,9 @@ const EMPTY_VALUES: DocumentTypeFormValues = {
   requiredFields: [],
   validationRules: [],
   sampleKeywords: [],
+  acceptedFileTypes: ["application/pdf", "image/png", "image/jpeg"],
+  maxFileSizeMb: 10,
+  useAi: true,
   isActive: true,
 };
 
@@ -73,17 +79,23 @@ export function DocumentTypeForm({
   const formRef = useRef<HTMLFormElement>(null);
   const initial = values ?? EMPTY_VALUES;
   const [isEditing, setIsEditing] = useState(!readOnlyUntilEdit);
+  const [useAiEnabled, setUseAiEnabled] = useState(initial.useAi);
   const hasKnownKind = KIND_OPTIONS.some(
     (option) => option.value === initial.kind,
   );
 
   const handleCancel = () => {
     formRef.current?.reset();
+    setUseAiEnabled(initial.useAi);
     setIsEditing(false);
   };
 
   const inputClasses = `rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 ${
     !isEditing ? "bg-zinc-50" : "bg-white"
+  }`;
+
+  const aiFieldClasses = `rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 ${
+    !isEditing || !useAiEnabled ? "bg-zinc-50" : "bg-white"
   }`;
 
   return (
@@ -193,50 +205,91 @@ export function DocumentTypeForm({
 
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            <RequiredLabel label="Structure Hints (one per line)" />
+            <RequiredLabel label="Accepted File Types (one per line)" />
+            <textarea
+              name="acceptedFileTypes"
+              required
+              rows={4}
+              defaultValue={listToTextareaValue(initial.acceptedFileTypes)}
+              readOnly={!isEditing}
+              className={inputClasses}
+            />
+          </label>
+
+          <label className="flex flex-col gap-2 text-sm text-zinc-700">
+            <RequiredLabel label="Max File Size (MB)" />
+            <input
+              type="number"
+              name="maxFileSizeMb"
+              required
+              min={1}
+              step={1}
+              defaultValue={initial.maxFileSizeMb}
+              readOnly={!isEditing}
+              className={inputClasses}
+            />
+          </label>
+        </div>
+
+        <label className="flex flex-col gap-2 text-sm text-zinc-700">
+          <RequiredLabel label="Required Fields (one per line)" />
+          <textarea
+            name="requiredFields"
+            required
+            rows={6}
+            defaultValue={listToTextareaValue(initial.requiredFields)}
+            readOnly={!isEditing}
+            className={inputClasses}
+          />
+        </label>
+
+        <hr className="my-4 border-zinc-300" />
+        <label className="flex items-center gap-3 text-sm text-zinc-700">
+          <input
+            type="checkbox"
+            name="useAi"
+            defaultChecked={initial.useAi}
+            disabled={!isEditing}
+            onChange={(event) => setUseAiEnabled(event.target.checked)}
+            className="h-4 w-4 rounded border-zinc-300"
+          />
+          Use AI to validate and enhance document processing
+        </label>
+
+        <label className="flex flex-col gap-2 text-sm text-zinc-700">
+          <span>Validation Rules (one per line)</span>
+          <textarea
+            name="validationRules"
+            rows={6}
+            defaultValue={listToTextareaValue(initial.validationRules)}
+            readOnly={!isEditing || !useAiEnabled}
+            disabled={!isEditing || !useAiEnabled}
+            className={aiFieldClasses}
+          />
+        </label>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="flex flex-col gap-2 text-sm text-zinc-700">
+            <span>Structure Hints (one per line)</span>
             <textarea
               name="structureHints"
-              required
               rows={6}
               defaultValue={listToTextareaValue(initial.structureHints)}
-              readOnly={!isEditing}
-              className={inputClasses}
+              readOnly={!isEditing || !useAiEnabled}
+              disabled={!isEditing || !useAiEnabled}
+              className={aiFieldClasses}
             />
           </label>
 
           <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            <RequiredLabel label="Required Fields (one per line)" />
-            <textarea
-              name="requiredFields"
-              required
-              rows={6}
-              defaultValue={listToTextareaValue(initial.requiredFields)}
-              readOnly={!isEditing}
-              className={inputClasses}
-            />
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            <RequiredLabel label="Validation Rules (one per line)" />
-            <textarea
-              name="validationRules"
-              required
-              rows={6}
-              defaultValue={listToTextareaValue(initial.validationRules)}
-              readOnly={!isEditing}
-              className={inputClasses}
-            />
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            <RequiredLabel label="Sample Keywords (one per line)" />
+            <span>Sample Keywords (one per line)</span>
             <textarea
               name="sampleKeywords"
-              required
               rows={6}
               defaultValue={listToTextareaValue(initial.sampleKeywords)}
-              readOnly={!isEditing}
-              className={inputClasses}
+              readOnly={!isEditing || !useAiEnabled}
+              disabled={!isEditing || !useAiEnabled}
+              className={aiFieldClasses}
             />
           </label>
         </div>

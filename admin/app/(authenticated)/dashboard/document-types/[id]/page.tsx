@@ -68,6 +68,9 @@ export default async function DocumentTypeDetailsPage({
           requiredFields: toStringArray(documentType.requiredFields),
           validationRules: toStringArray(documentType.validationRules),
           sampleKeywords: toStringArray(documentType.sampleKeywords),
+          acceptedFileTypes: toStringArray(documentType.acceptedFileTypes),
+          maxFileSizeMb: documentType.maxFileSizeMb,
+          useAi: documentType.useAi,
           isActive: documentType.isActive,
         }}
       />

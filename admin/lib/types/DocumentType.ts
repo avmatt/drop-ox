@@ -9,4 +9,7 @@ export type DocumentType = {
   validationRules: string[];
   validationNotes: string;
   sampleKeywords: string[];
+  acceptedFileTypes: string[];
+  maxFileSizeMb: number;
+  useAi: boolean;
 };

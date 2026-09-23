@@ -23,24 +23,31 @@ function parseStringList(value: string) {
 }
 
 function getPayload(formData: FormData) {
+  const useAi = formData.get("useAi") === "on";
+
   return {
     kind: getRequiredText(formData, "kind"),
     name: getRequiredText(formData, "name"),
     description: getRequiredText(formData, "description"),
     summary: getRequiredText(formData, "summary"),
     validationNotes: getRequiredText(formData, "validationNotes"),
-    structureHints: parseStringList(
-      getRequiredText(formData, "structureHints"),
-    ),
+    structureHints: useAi
+      ? parseStringList(getOptionalText(formData, "structureHints"))
+      : [],
     requiredFields: parseStringList(
       getRequiredText(formData, "requiredFields"),
     ),
-    validationRules: parseStringList(
-      getRequiredText(formData, "validationRules"),
+    validationRules: useAi
+      ? parseStringList(getOptionalText(formData, "validationRules"))
+      : [],
+    sampleKeywords: useAi
+      ? parseStringList(getOptionalText(formData, "sampleKeywords"))
+      : [],
+    acceptedFileTypes: parseStringList(
+      getRequiredText(formData, "acceptedFileTypes"),
     ),
-    sampleKeywords: parseStringList(
-      getRequiredText(formData, "sampleKeywords"),
-    ),
+    maxFileSizeMb: getRequiredPositiveInt(formData, "maxFileSizeMb"),
+    useAi,
   };
 }
 
