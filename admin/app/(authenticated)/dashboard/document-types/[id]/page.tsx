@@ -40,9 +40,19 @@ export default async function DocumentTypeDetailsPage({
         ]}
       />
 
+      <header>
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
+          Configuration
+        </p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
+          Document Type Details
+        </h1>
+        <p className="mt-2 text-sm text-zinc-600">
+          Review and update this document type configuration.
+        </p>
+      </header>
+
       <DocumentTypeForm
-        title="Document Type Details"
-        description="Review and edit this document type configuration."
         submitLabel="Save Changes"
         includeIsActive
         readOnlyUntilEdit

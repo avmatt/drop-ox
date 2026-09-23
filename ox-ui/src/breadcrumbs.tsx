@@ -11,7 +11,7 @@ type BreadcrumbsProps = {
 
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
-    <nav aria-label="Breadcrumb" className="text-sm text-zinc-600">
+    <nav aria-label="Breadcrumb" className="text-sm bg-zinc-200 text-zinc-600 -ml-8 -mr-6 -mt-6 p-4">
       <ol className="flex flex-wrap items-center">
         {items.map((item, index) => {
           const isCurrent = index === items.length - 1;

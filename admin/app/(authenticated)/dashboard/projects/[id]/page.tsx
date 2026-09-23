@@ -31,9 +31,19 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
         ]}
       />
 
+      <header>
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
+          Portfolio
+        </p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
+          Project Details
+        </h1>
+        <p className="mt-2 text-sm text-zinc-600">
+          Review and update this project&apos;s delivery information.
+        </p>
+      </header>
+
       <ProjectForm
-        title="Project Details"
-        description="Review and update this project’s delivery information."
         submitLabel="Save Changes"
         includeIsActive
         readOnlyUntilEdit

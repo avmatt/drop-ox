@@ -18,9 +18,18 @@ type DocumentRequestFormValues = {
   selectedDocumentTypeIds: string[];
 };
 
+function RequiredLabel({ label }: { label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1">
+      <span>{label}</span>
+      <span aria-label="required" className="text-red-500">
+        *
+      </span>
+    </span>
+  );
+}
+
 type DocumentRequestFormProps = {
-  title: string;
-  description: string;
   submitLabel?: string;
   values?: DocumentRequestFormValues;
   action: (formData: FormData) => Promise<void>;
@@ -48,8 +57,6 @@ const EMPTY_VALUES: DocumentRequestFormValues = {
 };
 
 export function DocumentRequestForm({
-  title,
-  description,
   submitLabel = "Save changes",
   values,
   action,
@@ -74,12 +81,7 @@ export function DocumentRequestForm({
   return (
     <Card>
       <form ref={formRef} action={action} className="space-y-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight text-zinc-900">{title}</h2>
-            <p className="mt-2 text-sm text-zinc-600">{description}</p>
-          </div>
-
+        <div className="flex items-start justify-end -mb-2">
           {readOnlyUntilEdit && !isEditing ? (
             <Button
               type="button"
@@ -92,20 +94,29 @@ export function DocumentRequestForm({
           ) : (
             <div className="flex items-center gap-2">
               {readOnlyUntilEdit ? (
-                <Button type="button" onClick={handleCancel} variant="secondary" size="sm">
+                <Button
+                  type="button"
+                  onClick={handleCancel}
+                  variant="secondary"
+                  size="sm"
+                >
                   Cancel
                 </Button>
               ) : null}
-              <Button type="submit">{submitLabel}</Button>
+              <Button type="submit" size="sm">
+                {submitLabel}
+              </Button>
             </div>
           )}
         </div>
 
-        {initial.id ? <input type="hidden" name="id" value={initial.id} /> : null}
+        {initial.id ? (
+          <input type="hidden" name="id" value={initial.id} />
+        ) : null}
 
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            Project
+            <RequiredLabel label="Project" />
             <select
               name="projectId"
               required
@@ -113,7 +124,9 @@ export function DocumentRequestForm({
               disabled={!isEditing}
               className={inputClasses}
             >
-              {!initial.projectId ? <option value="">Select project</option> : null}
+              {!initial.projectId ? (
+                <option value="">Select project</option>
+              ) : null}
               {projects.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.code} - {project.name}
@@ -123,7 +136,7 @@ export function DocumentRequestForm({
           </label>
 
           <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            Recipient email
+            <RequiredLabel label="Recipient email" />
             <input
               name="recipientEmail"
               type="email"
@@ -147,7 +160,7 @@ export function DocumentRequestForm({
           </label>
 
           <label className="flex flex-col gap-2 text-sm text-zinc-700">
-            Status
+            <RequiredLabel label="Status" />
             <select
               name="status"
               required
@@ -165,7 +178,7 @@ export function DocumentRequestForm({
         </div>
 
         <label className="flex flex-col gap-2 text-sm text-zinc-700">
-          Message
+          <RequiredLabel label="Message" />
           <textarea
             name="message"
             rows={4}
@@ -177,13 +190,16 @@ export function DocumentRequestForm({
 
         {includeSentAt ? (
           <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-600">
-            Sent requests will automatically capture a sent timestamp when saved.
+            Sent requests will automatically capture a sent timestamp when
+            saved.
           </div>
         ) : null}
 
         <div className="space-y-3">
           <div>
-            <h3 className="text-sm font-semibold text-zinc-900">Requested document types</h3>
+            <h3 className="text-sm font-semibold text-zinc-900">
+              <RequiredLabel label="Requested document types" />
+            </h3>
             <p className="mt-1 text-sm text-zinc-600">
               Select the document types this recipient must upload.
             </p>
@@ -191,7 +207,9 @@ export function DocumentRequestForm({
 
           <div className="grid gap-3 sm:grid-cols-2">
             {documentTypes.map((documentType) => {
-              const isChecked = initial.selectedDocumentTypeIds.includes(documentType.id);
+              const isChecked = initial.selectedDocumentTypeIds.includes(
+                documentType.id,
+              );
 
               return (
                 <label
@@ -207,7 +225,9 @@ export function DocumentRequestForm({
                     className="mt-1 h-4 w-4 rounded border-zinc-300"
                   />
                   <span>
-                    <span className="font-medium text-zinc-900">{documentType.name}</span>
+                    <span className="font-medium text-zinc-900">
+                      {documentType.name}
+                    </span>
                     <span className="block text-xs uppercase tracking-[0.08em] text-zinc-500">
                       {documentType.kind}
                     </span>

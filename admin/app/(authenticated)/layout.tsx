@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ClipboardDocumentListIcon,
   DocumentTextIcon,
@@ -48,16 +49,35 @@ export default async function AuthenticatedLayout({
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full h-20 flex items-center justify-between px-6 py-4 border-b border-zinc-200 bg-white shadow-sm">
+      <header className="fixed top-0 left-0 w-full h-20 flex items-center justify-between px-6 py-4 border-b border-zinc-200 bg-white shadow-sm overflow-hidden">
         <div>
-          <Text variant="secondary" size="xs">
-            Drop OX
-          </Text>
-          <Text variant="primary" size="lg">
-            Admin Console
-          </Text>
+          <Link href={Route.Dashboard.path} className="flex gap-2">
+            <div>
+              <Image
+                src="/logo-ox-black.png"
+                width={70}
+                height={40}
+                alt="Drop OX Logo"
+              />
+            </div>
+            <div>
+              <Text variant="secondary" size="xs">
+                Drop OX
+              </Text>
+              <Text variant="primary" size="lg">
+                Admin Console
+              </Text>
+            </div>
+          </Link>
         </div>
-        <AuthDropdown email={session.user.email} name={name} />
+        <div className="z-10">
+          <AuthDropdown email={session.user.email} name={name} />
+        </div>
+        <div className="absolute right-0 top-0 h-full flex -mr-5">
+          <div className="bg-solar-orange h-30 w-10 -mt-5 rotate-30" />
+          <div className="bg-solar-yellow h-30 w-10 -mt-5 rotate-30" />
+          <div className="bg-solar-blue h-30 w-10 -mt-5 rotate-30" />
+        </div>
       </header>
 
       <aside className="fixed top-20 h-full w-60 border-r border-zinc-200 bg-white p-4 shadow-sm">

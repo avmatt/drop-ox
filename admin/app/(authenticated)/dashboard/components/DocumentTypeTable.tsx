@@ -2,6 +2,15 @@
 
 import { useRouter } from "next/navigation";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
+} from "ox-ui";
+
 type DocumentTypeTableProps = {
   documentTypes: readonly {
     id: string;
@@ -32,20 +41,20 @@ export function DocumentTypeTable({
   return (
     <section className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-zinc-200 text-left text-sm">
-          <thead className="bg-zinc-50">
-            <tr>
-              <th className="px-4 py-3 font-semibold text-zinc-700">Type</th>
-              <th className="px-4 py-3 font-semibold text-zinc-700">Kind</th>
-              <th className="px-4 py-3 font-semibold text-zinc-700">Status</th>
-              <th className="px-4 py-3 font-semibold text-zinc-700">Last Updated</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-zinc-200 bg-white">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell>Type</TableHeaderCell>
+              <TableHeaderCell>Kind</TableHeaderCell>
+              <TableHeaderCell>Status</TableHeaderCell>
+              <TableHeaderCell>Last Updated</TableHeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {documentTypes.map((documentType) => (
-              <tr
+              <TableRow
                 key={documentType.id}
-                className="cursor-pointer align-middle transition hover:bg-zinc-50 focus-within:bg-zinc-50"
+                className="cursor-pointer transition hover:bg-zinc-50 focus-within:bg-zinc-50"
                 onClick={() => navigateToDetails(documentType.id)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
@@ -57,18 +66,18 @@ export function DocumentTypeTable({
                 role="link"
                 aria-label={`View ${documentType.name} details`}
               >
-                <td className="px-4 py-4 text-zinc-900">
+                <TableCell className="text-zinc-900">
                   <p className="font-semibold text-zinc-900">{documentType.name}</p>
-                </td>
-                <td className="px-4 py-4 text-zinc-600">{documentType.kind}</td>
-                <td className="px-4 py-4 text-zinc-600">
+                </TableCell>
+                <TableCell>{documentType.kind}</TableCell>
+                <TableCell>
                   {documentType.isActive ? "Active" : "Inactive"}
-                </td>
-                <td className="px-4 py-4 text-zinc-600">{formatDate(documentType.updatedAt)}</td>
-              </tr>
+                </TableCell>
+                <TableCell>{formatDate(documentType.updatedAt)}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </section>
   );

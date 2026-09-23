@@ -17,10 +17,10 @@ function buttonClasses({
   fullWidth = false,
 }: ButtonClassOptions = {}) {
   const variantClasses: Record<ButtonVariant, string> = {
-    primary: "bg-black text-white hover:bg-zinc-800",
+    primary: "border border-transparent bg-black text-white hover:bg-zinc-800",
     secondary: "border border-zinc-300 text-zinc-800 hover:bg-zinc-100",
-    danger: "bg-red-700 text-white hover:bg-red-800",
-    ghost: "text-zinc-800 hover:bg-zinc-100",
+    danger: "border border-transparent bg-red-700 text-white hover:bg-red-800",
+    ghost: "border border-transparent text-zinc-800 hover:bg-zinc-100",
   };
 
   const sizeClasses: Record<ButtonSize, string> = {
@@ -29,7 +29,7 @@ function buttonClasses({
   };
 
   return joinClasses(
-    "rounded-full font-semibold transition disabled:cursor-not-allowed disabled:opacity-60",
+    "box-border rounded-full border font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer",
     variantClasses[variant],
     sizeClasses[size],
     fullWidth && "w-full",

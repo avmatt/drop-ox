@@ -2,7 +2,6 @@
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import { authClient } from "@/lib/auth/auth-client";
 import { Route } from "@/lib/routes";
