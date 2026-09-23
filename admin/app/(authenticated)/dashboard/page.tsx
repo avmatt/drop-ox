@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { buttonClasses } from "@/components/ui/Button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Breadcrumbs } from "ox-ui";
+import { buttonClasses } from "ox-ui";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ox-ui";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
 

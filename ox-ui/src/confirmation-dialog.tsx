@@ -3,7 +3,7 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { type ReactNode, useState } from "react";
 
-import { Button, type ButtonVariant } from "@/components/ui/Button";
+import { Button, type ButtonVariant } from "./button.js";
 
 type HiddenField = {
   name: string;

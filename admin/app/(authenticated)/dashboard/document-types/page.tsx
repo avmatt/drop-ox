@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { buttonClasses } from "@/components/ui/Button";
+import { Breadcrumbs } from "ox-ui";
+import { buttonClasses } from "ox-ui";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
 import { DocumentTypeTable } from "../components/DocumentTypeTable";

@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { buttonClasses } from "@/components/ui/Button";
+import { Breadcrumbs, Button } from "ox-ui";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
 
@@ -37,9 +36,9 @@ export default async function DocumentRequestsPage() {
           </p>
         </div>
 
-        <Link href={`${Route.DocumentRequests}/new`} className={buttonClasses({ size: "sm" })}>
+        <Button as={Link} href={`${Route.DocumentRequests}/new`} size="sm">
           New request
-        </Link>
+        </Button>
       </header>
 
       <DocumentRequestTable

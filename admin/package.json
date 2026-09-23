@@ -1,5 +1,5 @@
 {
-  "name": "admin",
+  "name": "@drop-ox/admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,6 +23,7 @@
     "better-auth": "^1.7.5",
     "next": "16.3.5",
     "nodemailer": "^10.0.10",
+    "ox-ui": "file:../ox-ui",
     "pg": "^8.23.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"
