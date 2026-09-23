@@ -8,8 +8,8 @@ export default function NewProjectPage() {
     <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: "Dashboard", href: Route.Dashboard },
-          { label: "Projects", href: Route.Projects },
+          Route.Dashboard,
+          Route.Projects,
           { label: "New" },
         ]}
       />

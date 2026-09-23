@@ -24,7 +24,7 @@ export function AuthDropdown({ email, name }: AuthDropdownProps) {
 
     try {
       await authClient.signOut();
-      router.push(Route.Home);
+      router.push(Route.Home.path);
       router.refresh();
     } finally {
       setIsSigningOut(false);

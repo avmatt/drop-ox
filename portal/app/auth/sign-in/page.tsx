@@ -12,7 +12,7 @@ export default async function SignInPage() {
   });
 
   if (session) {
-    redirect(Route.Dashboard);
+    redirect(Route.Dashboard.path);
   }
 
   return (
@@ -33,7 +33,7 @@ export default async function SignInPage() {
           <SignInButton />
           <Link
             className="text-sm font-semibold text-zinc-900 underline underline-offset-4"
-            href={Route.Home}
+            href={Route.Home.path}
           >
             Back home
           </Link>

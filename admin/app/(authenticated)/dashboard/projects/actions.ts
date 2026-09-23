@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db/db";
-import { setToastCookie } from "@/lib/toast";
 import { PROJECT_STATUS_VALUES, type ProjectStatus } from "./constants";
 
 function getRequiredText(formData: FormData, key: string) {
@@ -90,10 +89,6 @@ export async function createProjectAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/projects");
   revalidatePath(`/dashboard/projects/${created.id}`);
-  await setToastCookie({
-    title: "Project created",
-    message: "The project was created successfully.",
-  });
 
   redirect(`/dashboard/projects/${created.id}`);
 }
@@ -114,10 +109,6 @@ export async function updateProjectAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/projects");
   revalidatePath(`/dashboard/projects/${id}`);
-  await setToastCookie({
-    title: "Project saved",
-    message: "Your project changes were saved.",
-  });
 
   redirect(`/dashboard/projects/${id}`);
 }
@@ -131,9 +122,5 @@ export async function deleteProjectAction(formData: FormData) {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/projects");
-  await setToastCookie({
-    title: "Project deleted",
-    message: "The project was deleted successfully.",
-  });
   redirect("/dashboard/projects");
 }

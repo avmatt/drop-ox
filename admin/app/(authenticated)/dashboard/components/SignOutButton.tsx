@@ -10,7 +10,7 @@ export const SignOutButton = () => {
 
   const handleSignOut = async () => {
     await authClient.signOut();
-    router.push(Route.Home);
+    router.push(Route.Home.path);
     router.refresh();
   };
 

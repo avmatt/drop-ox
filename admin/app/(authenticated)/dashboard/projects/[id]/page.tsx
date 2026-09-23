@@ -25,9 +25,9 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
     <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: "Dashboard", href: Route.Dashboard },
-          { label: "Projects", href: Route.Projects },
-          { label: project.name },
+          Route.Dashboard,
+          Route.Projects,
+          { label: "Project Details" },
         ]}
       />
 

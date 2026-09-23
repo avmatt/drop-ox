@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db/db";
 import { sendEmail } from "@/lib/email/mailer";
-import { setToastCookie } from "@/lib/toast";
 
 import { DOCUMENT_REQUEST_STATUS_VALUES, type DocumentRequestStatus } from "./constants";
 
@@ -149,10 +148,6 @@ export async function createDocumentRequestAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/document-requests");
   revalidatePath(`/dashboard/document-requests/${created.id}`);
-  await setToastCookie({
-    title: "Document request created",
-    message: "The request was created successfully.",
-  });
 
   redirect(`/dashboard/document-requests/${created.id}`);
 }
@@ -179,10 +174,6 @@ export async function updateDocumentRequestAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/document-requests");
   revalidatePath(`/dashboard/document-requests/${id}`);
-  await setToastCookie({
-    title: "Document request saved",
-    message: "Your document request changes were saved.",
-  });
 
   redirect(`/dashboard/document-requests/${id}`);
 }
@@ -196,10 +187,6 @@ export async function deleteDocumentRequestAction(formData: FormData) {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/document-requests");
-  await setToastCookie({
-    title: "Document request deleted",
-    message: "The document request was deleted successfully.",
-  });
   redirect("/dashboard/document-requests");
 }
 
@@ -226,10 +213,6 @@ export async function sendDocumentRequestAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/document-requests");
   revalidatePath(`/dashboard/document-requests/${id}`);
-  await setToastCookie({
-    title: "Document request sent",
-    message: "The request email was sent successfully.",
-  });
 
   redirect(`/dashboard/document-requests/${id}`);
 }

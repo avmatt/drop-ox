@@ -15,7 +15,7 @@ export const SignInButton = () => {
     try {
       await authClient.signIn.social({
         provider: Provider.Microsoft,
-        callbackURL: Route.Dashboard,
+        callbackURL: Route.Dashboard.path,
       });
     } finally {
       setIsSigningIn(false);

@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "ui:refresh": "rm -rf node_modules/ox-ui && npm install ox-ui@file:../ox-ui --install-links --force",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "lint": "eslint"

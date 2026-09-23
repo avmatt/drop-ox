@@ -17,7 +17,7 @@ export default async function AuthenticatedLayout({ children }: AuthenticatedLay
   });
 
   if (!session) {
-    redirect(Route.SignIn);
+    redirect(Route.SignIn.path);
   }
 
   const name = session.user.name || session.user.email;
@@ -39,7 +39,7 @@ export default async function AuthenticatedLayout({ children }: AuthenticatedLay
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">Navigation</p>
           <nav className="space-y-1" aria-label="Authenticated navigation">
             <Link
-              href={Route.Dashboard}
+              href={Route.Dashboard.path}
               className="block rounded-lg px-3 py-2 text-sm font-medium text-zinc-800 transition hover:bg-zinc-100"
             >
               Dashboard

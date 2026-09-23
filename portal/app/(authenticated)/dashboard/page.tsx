@@ -28,7 +28,7 @@ export default async function DashboardPage() {
   });
 
   if (!session) {
-    redirect(Route.SignIn);
+    redirect(Route.SignIn.path);
   }
 
   const documentRequests = await db.documentRequest.findMany({
@@ -76,7 +76,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: "Dashboard", href: Route.Dashboard }]} />
+      <Breadcrumbs items={[Route.Dashboard]} />
 
       <header>
         <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
@@ -206,12 +206,14 @@ export default async function DashboardPage() {
                                   <div className="space-y-2">
                                     {failedDocument ? (
                                       <div className="rounded-lg border border-red-200 bg-red-50 p-2 text-xs text-red-700">
-                                        <p className="font-medium">Last upload failed validation.</p>
-                                        <p>
-                                          File: {failedDocument.fileName}
+                                        <p className="font-medium">
+                                          Last upload failed validation.
                                         </p>
+                                        <p>File: {failedDocument.fileName}</p>
                                         {failedDocument.validationNotes ? (
-                                          <p className="mt-1">{failedDocument.validationNotes}</p>
+                                          <p className="mt-1">
+                                            {failedDocument.validationNotes}
+                                          </p>
                                         ) : null}
                                       </div>
                                     ) : null}

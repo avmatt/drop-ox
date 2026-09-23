@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db/db";
-import { setToastCookie } from "@/lib/toast";
 
 function getRequiredText(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -18,7 +17,7 @@ function getRequiredText(formData: FormData, key: string) {
 
 function parseStringList(value: string) {
   return value
-    .split(/\r?\n|,/)
+    .split(/\r?\n/)
     .map((item) => item.trim())
     .filter((item) => item.length > 0);
 }
@@ -58,10 +57,6 @@ export async function createDocumentTypeAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/document-types");
   revalidatePath(`/dashboard/document-types/${created.id}`);
-  await setToastCookie({
-    title: "Document type created",
-    message: "The document type was created successfully.",
-  });
 
   redirect(`/dashboard/document-types/${created.id}`);
 }
@@ -82,10 +77,6 @@ export async function updateDocumentTypeAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath(`/dashboard/document-types`);
   revalidatePath(`/dashboard/document-types/${id}`);
-  await setToastCookie({
-    title: "Document type saved",
-    message: "Your document type changes were saved.",
-  });
 
   redirect(`/dashboard/document-types/${id}`);
 }
@@ -99,9 +90,5 @@ export async function deleteDocumentTypeAction(formData: FormData) {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/document-types");
-  await setToastCookie({
-    title: "Document type deleted",
-    message: "The document type was deleted successfully.",
-  });
   redirect("/dashboard/document-types");
 }

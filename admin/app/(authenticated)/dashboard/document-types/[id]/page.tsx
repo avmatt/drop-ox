@@ -18,7 +18,9 @@ type DocumentTypeDetailsPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDetailsPageProps) {
+export default async function DocumentTypeDetailsPage({
+  params,
+}: DocumentTypeDetailsPageProps) {
   const { id } = await params;
   const documentType = await db.documentType.findUnique({
     where: { id },
@@ -32,9 +34,9 @@ export default async function DocumentTypeDetailsPage({ params }: DocumentTypeDe
     <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: "Dashboard", href: Route.Dashboard },
-          { label: "Document Types", href: Route.DocumentTypes },
-          { label: documentType.name },
+          Route.Dashboard,
+          Route.DocumentTypes,
+          { label: "Document Type Details" },
         ]}
       />
 

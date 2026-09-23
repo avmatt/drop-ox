@@ -1,8 +1,26 @@
 export const Route = {
-    Home: "/",
-    SignIn: "/auth/sign-in",
-    Dashboard: "/dashboard",
-    DocumentTypes: "/dashboard/document-types",
-    Projects: "/dashboard/projects",
-    DocumentRequests: "/dashboard/document-requests",
+    Home: {
+        label: "Home",
+        path: "/",
+    },
+    SignIn: {
+        label: "Sign In",
+        path: "/auth/sign-in",
+    },
+    Dashboard: {
+        label: "Dashboard",
+        path: "/dashboard",
+    },
+    DocumentTypes: {
+        label: "Document Types",
+        path: "/dashboard/document-types",
+    },
+    Projects: {
+        label: "Projects",
+        path: "/dashboard/projects",
+    },
+    DocumentRequests: {
+        label: "Document Requests",
+        path: "/dashboard/document-requests",
+    },
 };

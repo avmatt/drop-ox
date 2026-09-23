@@ -23,7 +23,7 @@ export default async function DocumentRequestsPage() {
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: "Dashboard", href: Route.Dashboard }, { label: "Document Requests" }]} />
+      <Breadcrumbs items={[ Route.Dashboard, Route.DocumentRequests]} />
 
       <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -36,7 +36,7 @@ export default async function DocumentRequestsPage() {
           </p>
         </div>
 
-        <Button as={Link} href={`${Route.DocumentRequests}/new`} size="sm">
+        <Button as={Link} href={`${Route.DocumentRequests.path}/new`} size="sm">
           New request
         </Button>
       </header>

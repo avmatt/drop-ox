@@ -1,5 +1,14 @@
 export const Route = {
-  Home: "/",
-  SignIn: "/auth/sign-in",
-  Dashboard: "/dashboard",
+  Home: {
+    label: "Home",
+    path: "/",
+  },
+  SignIn: {
+    label: "Sign In",
+    path: "/auth/sign-in",
+  },
+  Dashboard: {
+    label: "Dashboard",
+    path: "/dashboard",
+  },
 } as const;

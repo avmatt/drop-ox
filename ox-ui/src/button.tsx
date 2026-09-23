@@ -11,7 +11,7 @@ type ButtonClassOptions = {
   fullWidth?: boolean;
 };
 
-export function buttonClasses({
+function buttonClasses({
   variant = "primary",
   size = "md",
   fullWidth = false,

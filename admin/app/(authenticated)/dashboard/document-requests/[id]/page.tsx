@@ -82,9 +82,9 @@ export default async function DocumentRequestDetailsPage({ params }: DocumentReq
     <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: "Dashboard", href: Route.Dashboard },
-          { label: "Document Requests", href: Route.DocumentRequests },
-          { label: documentRequest.recipientEmail },
+          Route.Dashboard,
+          Route.DocumentRequests,
+          { label: "Request Details" },
         ]}
       />
 

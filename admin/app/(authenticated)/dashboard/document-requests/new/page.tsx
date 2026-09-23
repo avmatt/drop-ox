@@ -15,8 +15,8 @@ export default async function NewDocumentRequestPage() {
     <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: "Dashboard", href: Route.Dashboard },
-          { label: "Document Requests", href: Route.DocumentRequests },
+          Route.Dashboard,
+          Route.DocumentRequests,
           { label: "New" },
         ]}
       />

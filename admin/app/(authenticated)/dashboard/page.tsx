@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-import { Breadcrumbs } from "ox-ui";
-import { buttonClasses } from "ox-ui";
+import { Breadcrumbs, Text } from "ox-ui";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ox-ui";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
@@ -66,117 +65,96 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: "Dashboard", href: Route.Dashboard }]} />
+      <Breadcrumbs items={[ Route.Dashboard ]} />
 
       <header>
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">Overview</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">Dashboard</h1>
-        <p className="mt-2 text-zinc-600">
+        <Text variant="secondary" size="xs">Overview</Text>
+        <Text variant="primary" size="3xl" as="h1">Dashboard</Text>
+        <p>
           Manage core admin configuration for document ingestion and validation.
         </p>
       </header>
 
-      <Card>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <Link href={Route.DocumentRequests.path} className="block">
+        <Card className="cursor-pointer transition hover:border-zinc-300 hover:shadow-md">
           <CardHeader>
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
-              Configuration
-            </p>
-            <CardTitle className="mt-2">Document Types</CardTitle>
-            <CardDescription>
-              Maintain document classification types used by extraction and validation rules.
-            </CardDescription>
-          </CardHeader>
-          <Link
-            href={Route.DocumentTypes}
-            className={buttonClasses({ size: "sm" })}
-          >
-            Open document types
-          </Link>
-        </div>
-
-        <CardContent className="grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Total</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{totalDocumentTypes}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Active</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{activeDocumentTypes}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Last Updated</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{lastDocumentTypeUpdatedLabel}</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <CardHeader>
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
-              Portfolio
-            </p>
-            <CardTitle className="mt-2">Projects</CardTitle>
-            <CardDescription>
-              Track active delivery work, client assignments, and project lifecycle status.
-            </CardDescription>
-          </CardHeader>
-          <Link
-            href={Route.Projects}
-            className={buttonClasses({ size: "sm" })}
-          >
-            Open projects
-          </Link>
-        </div>
-
-        <CardContent className="grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Total</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{totalProjects}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Active</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{activeProjects}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Last Updated</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{lastProjectUpdatedLabel}</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <CardHeader>
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
-              Requests
-            </p>
-            <CardTitle className="mt-2">Document Requests</CardTitle>
+            <Text variant="secondary" size="xs">Requests</Text>
+            <Text variant="primary" size="2xl">Document Requests</Text>
             <CardDescription>
               Create requests tied to a project, choose required document types, and email the portal invite.
             </CardDescription>
           </CardHeader>
-          <Link href={Route.DocumentRequests} className={buttonClasses({ size: "sm" })}>
-            Open document requests
-          </Link>
-        </div>
 
-        <CardContent className="grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Total</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{totalDocumentRequests}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Sent</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{sentDocumentRequests}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-            <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Last Updated</p>
-            <p className="mt-1 text-2xl font-semibold text-zinc-900">{lastDocumentRequestUpdatedLabel}</p>
-          </div>
-        </CardContent>
-      </Card>
+          <CardContent className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Total</p>
+              <p className="mt-1 text-2xl font-semibold text-zinc-900">{totalDocumentRequests}</p>
+            </div>
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Sent</p>
+              <p className="mt-1 text-2xl font-semibold text-zinc-900">{sentDocumentRequests}</p>
+            </div>
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Last Updated</p>
+              <p className="mt-1 text-2xl font-semibold text-zinc-900">{lastDocumentRequestUpdatedLabel}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+
+      <Link href={Route.DocumentTypes.path} className="block">
+        <Card className="cursor-pointer transition hover:border-zinc-300 hover:shadow-md">
+          <CardHeader>
+            <Text variant="secondary" size="xs">Configuration</Text>
+            <Text variant="primary" size="2xl">Document Types</Text>
+            <CardDescription>
+              Maintain document classification types used by extraction and validation rules.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Total</p>
+              <p className="mt-1 text-2xl font-semibold text-zinc-900">{totalDocumentTypes}</p>
+            </div>
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Active</p>
+              <p className="mt-1 text-2xl font-semibold text-zinc-900">{activeDocumentTypes}</p>
+            </div>
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Last Updated</p>
+              <p className="mt-1 text-2xl font-semibold text-zinc-900">{lastDocumentTypeUpdatedLabel}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+
+      <Link href={Route.Projects.path} className="block">
+        <Card className="cursor-pointer transition hover:border-zinc-300 hover:shadow-md">
+          <CardHeader>
+            <Text variant="secondary" size="xs">Portfolio</Text>
+            <Text variant="primary" size="2xl">Projects</Text>
+            <CardDescription>
+              Track active delivery work, client assignments, and project lifecycle status.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Total</p>
+              <p className="mt-1 text-2xl font-semibold text-zinc-900">{totalProjects}</p>
+            </div>
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Active</p>
+              <p className="mt-1 text-2xl font-semibold text-zinc-900">{activeProjects}</p>
+            </div>
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-xs uppercase tracking-[0.08em] text-zinc-500">Last Updated</p>
+              <p className="mt-1 text-2xl font-semibold text-zinc-900">{lastProjectUpdatedLabel}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
     </div>
   );
 }
