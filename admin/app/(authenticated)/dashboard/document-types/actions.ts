@@ -67,6 +67,9 @@ function getPayload(formData: FormData) {
     acceptedFileTypes: parseStringList(
       getRequiredText(formData, "acceptedFileTypes"),
     ),
+    acceptedFileExtensions: parseStringList(
+      getRequiredText(formData, "acceptedFileExtensions"),
+    ),
     maxFileSizeMb: getRequiredPositiveInt(formData, "maxFileSizeMb"),
     useAi,
   };

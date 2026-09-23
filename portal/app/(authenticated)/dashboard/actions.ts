@@ -78,6 +78,9 @@ export async function uploadDocumentAction(formData: FormData) {
       kind: true,
       name: true,
       requiredFields: true,
+      acceptedFileTypes: true,
+      acceptedFileExtensions: true,
+      maxFileSizeMb: true,
       validationRules: true,
       sampleKeywords: true,
     },
@@ -93,6 +96,9 @@ export async function uploadDocumentAction(formData: FormData) {
     {
       name: documentType.name,
       requiredFields: toStringArray(documentType.requiredFields),
+      acceptedFileTypes: toStringArray(documentType.acceptedFileTypes),
+      acceptedFileExtensions: toStringArray(documentType.acceptedFileExtensions),
+      maxFileSizeMb: documentType.maxFileSizeMb,
     },
     {
       name: file.name,

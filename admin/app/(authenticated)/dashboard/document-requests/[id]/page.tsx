@@ -225,7 +225,7 @@ export default async function DocumentRequestDetailsPage({
               <TableBody>
                 {documentRequest.requestedDocumentTypes.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell className="font-semibold text-zinc-900">
+                    <TableCell className="font-semibold text-zinc-900 align-top">
                       {item.documentType.name}
                       <Text variant="secondary" size="xs">
                         {item.documentType.kind}
@@ -241,13 +241,17 @@ export default async function DocumentRequestDetailsPage({
                               const validationNotes = toValidationNotes(
                                 document.validationNotes,
                               );
+                              const extractedContent =
+                                typeof document.extractedData === "string"
+                                  ? document.extractedData.trim()
+                                  : "";
 
                               return (
                                 <div
                                   key={document.id}
                                   className="rounded-lg border border-zinc-200 p-3"
                                 >
-                                  <div className="flex gap-2 text-sm">
+                                  <div className="flex justify-between gap-2 text-sm">
                                     <span className="font-medium text-zinc-900">
                                       {document.fileName}
                                     </span>
@@ -280,6 +284,8 @@ export default async function DocumentRequestDetailsPage({
                                     </a>
                                   ) : null}
 
+                                  
+
                                   <hr className="my-2 border-zinc-200" />
 
                                   {validationNotes.length > 0 && (
@@ -289,6 +295,19 @@ export default async function DocumentRequestDetailsPage({
                                         ))}
                                     </ul>
                                   )}
+
+                                  <details className="mt-3 rounded-md border border-zinc-200 bg-zinc-50 p-2">
+                                    <summary className="cursor-pointer text-xs font-medium text-zinc-700">
+                                      View extracted content
+                                    </summary>
+                                    <div className="mt-2 max-h-64 overflow-auto rounded bg-white p-2">
+                                      <pre className="whitespace-pre-wrap break-words text-xs text-zinc-700">
+                                        {extractedContent.length > 0
+                                          ? extractedContent
+                                          : "No extracted content available."}
+                                      </pre>
+                                    </div>
+                                  </details>
                                 </div>
                               );
                             })(),

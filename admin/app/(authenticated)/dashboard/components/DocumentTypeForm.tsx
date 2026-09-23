@@ -27,6 +27,7 @@ type DocumentTypeFormValues = {
   validationRules: string[];
   sampleKeywords: string[];
   acceptedFileTypes: string[];
+  acceptedFileExtensions: string[];
   maxFileSizeMb: number;
   useAi: boolean;
   isActive?: boolean;
@@ -50,7 +51,8 @@ const EMPTY_VALUES: DocumentTypeFormValues = {
   requiredFields: [],
   validationRules: [],
   sampleKeywords: [],
-  acceptedFileTypes: ["application/pdf", "image/png", "image/jpeg"],
+  acceptedFileTypes: ["application/pdf", "application/msword", "image/png", "image/jpeg"],
+  acceptedFileExtensions: ["pdf", "doc", "docx", "png", "jpg", "jpeg"],
   maxFileSizeMb: 10,
   useAi: true,
   isActive: true,
@@ -211,6 +213,18 @@ export function DocumentTypeForm({
               required
               rows={4}
               defaultValue={listToTextareaValue(initial.acceptedFileTypes)}
+              readOnly={!isEditing}
+              className={inputClasses}
+            />
+          </label>
+
+          <label className="flex flex-col gap-2 text-sm text-zinc-700">
+            <RequiredLabel label="Accepted File Extensions (one per line)" />
+            <textarea
+              name="acceptedFileExtensions"
+              required
+              rows={4}
+              defaultValue={listToTextareaValue(initial.acceptedFileExtensions)}
               readOnly={!isEditing}
               className={inputClasses}
             />

@@ -16,7 +16,10 @@ export async function uploadDocumentToAzure(file: File, folder = "uploads") {
   const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
   const containerClient = blobServiceClient.getContainerClient(defaultContainerName);
 
-  await containerClient.createIfNotExists();
+  await containerClient.createIfNotExists({
+    access: "blob",
+  });
+  await containerClient.setAccessPolicy("blob");
 
   const safeFileName = sanitizeFileName(file.name || "document");
   const extension = safeFileName.includes(".") ? safeFileName.slice(safeFileName.lastIndexOf(".")) : "";
