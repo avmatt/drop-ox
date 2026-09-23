@@ -29,6 +29,18 @@ function formatDateTime(value: Date | null) {
   }).format(value);
 }
 
+function formatValidationData(value: unknown) {
+  if (value === null || value === undefined) {
+    return "Not available";
+  }
+
+  try {
+    return JSON.stringify(value, null, 2);
+  } catch {
+    return "Not available";
+  }
+}
+
 export default async function DocumentRequestDetailsPage({ params }: DocumentRequestDetailsPageProps) {
   const { id } = await params;
 
@@ -39,6 +51,19 @@ export default async function DocumentRequestDetailsPage({ params }: DocumentReq
       requestedDocumentTypes: {
         include: {
           documentType: true,
+          documents: {
+            orderBy: [{ createdAt: "desc" }],
+            select: {
+              id: true,
+              fileName: true,
+              fileUrl: true,
+              validationStatus: true,
+              validationScore: true,
+              validationNotes: true,
+              extractedData: true,
+              createdAt: true,
+            },
+          },
         },
       },
     },
@@ -133,7 +158,7 @@ export default async function DocumentRequestDetailsPage({ params }: DocumentReq
               <tr>
                 <th className="px-4 py-3 font-semibold text-zinc-700">Document Type</th>
                 <th className="px-4 py-3 font-semibold text-zinc-700">Kind</th>
-                <th className="px-4 py-3 font-semibold text-zinc-700">Required</th>
+                <th className="px-4 py-3 font-semibold text-zinc-700">Validation Results</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 bg-white">
@@ -143,7 +168,61 @@ export default async function DocumentRequestDetailsPage({ params }: DocumentReq
                     <p className="font-semibold text-zinc-900">{item.documentType.name}</p>
                   </td>
                   <td className="px-4 py-4 text-zinc-600">{item.documentType.kind}</td>
-                  <td className="px-4 py-4 text-zinc-600">Yes</td>
+                  <td className="px-4 py-4">
+                    {item.documents.length === 0 ? (
+                      <p className="text-zinc-600">No uploads yet.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {item.documents.map((document) => (
+                          <div key={document.id} className="rounded-lg border border-zinc-200 p-3">
+                            <div className="flex flex-wrap items-center gap-2 text-sm">
+                              <span className="font-medium text-zinc-900">{document.fileName}</span>
+                              <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-700">
+                                {document.validationStatus}
+                              </span>
+                              {typeof document.validationScore === "number" ? (
+                                <span className="text-xs text-zinc-600">
+                                  Score: {document.validationScore}
+                                </span>
+                              ) : null}
+                            </div>
+
+                            <p className="mt-1 text-xs text-zinc-500">
+                              Uploaded: {formatDateTime(document.createdAt)}
+                            </p>
+
+                            {document.fileUrl ? (
+                              <a
+                                href={document.fileUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="mt-1 inline-block text-xs text-blue-600 underline"
+                              >
+                                Open uploaded file
+                              </a>
+                            ) : null}
+
+                            {document.validationNotes ? (
+                              <p className="mt-2 text-xs text-zinc-700">
+                                <span className="font-medium">Notes:</span> {document.validationNotes}
+                              </p>
+                            ) : (
+                              <p className="mt-2 text-xs text-zinc-500">No validation notes.</p>
+                            )}
+
+                            <details className="mt-2">
+                              <summary className="cursor-pointer text-xs font-medium text-zinc-700">
+                                View extracted validation data
+                              </summary>
+                              <pre className="mt-2 max-h-48 overflow-auto rounded bg-zinc-50 p-2 text-[11px] text-zinc-700">
+                                {formatValidationData(document.extractedData)}
+                              </pre>
+                            </details>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -56,6 +56,7 @@ export default async function DashboardPage() {
             },
           },
           documents: {
+            orderBy: [{ createdAt: "desc" }],
             select: {
               id: true,
               documentRequestId: true,
@@ -64,6 +65,7 @@ export default async function DashboardPage() {
               fileName: true,
               fileUrl: true,
               validationStatus: true,
+              validationNotes: true,
               createdAt: true,
             },
           },
@@ -165,6 +167,9 @@ export default async function DashboardPage() {
                           const existingDocument = item.documents.find(
                             (doc) => doc.validationStatus !== "INVALID",
                           );
+                          const failedDocument = item.documents.find(
+                            (doc) => doc.validationStatus === "INVALID",
+                          );
                           const canUpload = !existingDocument;
 
                           return (
@@ -198,45 +203,59 @@ export default async function DashboardPage() {
                                     </span>
                                   </div>
                                 ) : (
-                                  <form
-                                    action={uploadDocumentAction}
-                                    className="flex flex-col gap-2 sm:flex-row"
-                                  >
-                                    <input
-                                      type="hidden"
-                                      name="projectId"
-                                      value={request.projectId}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="documentRequestId"
-                                      value={request.id}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="documentRequestDocumentTypeId"
-                                      value={item.id}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="documentTypeId"
-                                      value={item.documentTypeId}
-                                    />
-                                    <input
-                                      type="file"
-                                      name="file"
-                                      accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
-                                      required
-                                      className="block w-full max-w-xs text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-zinc-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
-                                    />
-                                    <button
-                                      type="submit"
-                                      className="rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-400"
-                                      disabled={!canUpload}
+                                  <div className="space-y-2">
+                                    {failedDocument ? (
+                                      <div className="rounded-lg border border-red-200 bg-red-50 p-2 text-xs text-red-700">
+                                        <p className="font-medium">Last upload failed validation.</p>
+                                        <p>
+                                          File: {failedDocument.fileName}
+                                        </p>
+                                        {failedDocument.validationNotes ? (
+                                          <p className="mt-1">{failedDocument.validationNotes}</p>
+                                        ) : null}
+                                      </div>
+                                    ) : null}
+
+                                    <form
+                                      action={uploadDocumentAction}
+                                      className="flex flex-col gap-2 sm:flex-row"
                                     >
-                                      Submit
-                                    </button>
-                                  </form>
+                                      <input
+                                        type="hidden"
+                                        name="projectId"
+                                        value={request.projectId}
+                                      />
+                                      <input
+                                        type="hidden"
+                                        name="documentRequestId"
+                                        value={request.id}
+                                      />
+                                      <input
+                                        type="hidden"
+                                        name="documentRequestDocumentTypeId"
+                                        value={item.id}
+                                      />
+                                      <input
+                                        type="hidden"
+                                        name="documentTypeId"
+                                        value={item.documentTypeId}
+                                      />
+                                      <input
+                                        type="file"
+                                        name="file"
+                                        accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
+                                        required
+                                        className="block w-full max-w-xs text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-zinc-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
+                                      />
+                                      <button
+                                        type="submit"
+                                        className="rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-400"
+                                        disabled={!canUpload}
+                                      >
+                                        Submit
+                                      </button>
+                                    </form>
+                                  </div>
                                 )}
                               </td>
                             </tr>
