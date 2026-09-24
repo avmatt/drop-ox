@@ -4,7 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
-import { Text } from "ox-ui";
+import { Text } from "@drop-ox/ox-ui";
 
 import { auth } from "@/lib/auth/auth";
 import { Route } from "@/lib/routes";

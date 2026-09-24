@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { Breadcrumbs, Card, ConfirmationDialog } from "ox-ui";
+import { Breadcrumbs, Card, ConfirmationDialog } from "@drop-ox/ox-ui";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
 import { ProjectForm } from "../components/ProjectForm";

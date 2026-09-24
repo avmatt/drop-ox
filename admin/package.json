@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run ui:refresh && next build",
     "start": "next start",
-    "ui:refresh": "rm -rf node_modules/ox-ui && npm install ox-ui@file:../ox-ui --install-links --force",
+    "ui:refresh": "npm --prefix ../ox-ui run pack:local && rm -rf node_modules/@drop-ox/ox-ui && npm install ../ox-ui/drop-ox-ox-ui-*.tgz --no-save --force",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
@@ -18,6 +18,7 @@
     "seed": "tsx prisma/seed/seed.ts"
   },
   "dependencies": {
+    "@drop-ox/ox-ui": "file:../ox-ui",
     "@headlessui/react": "^2.2.10",
     "@heroicons/react": "^2.2.0",
     "@prisma/adapter-pg": "^7.10.0",
@@ -25,7 +26,6 @@
     "better-auth": "^1.7.5",
     "next": "16.3.5",
     "nodemailer": "^10.0.10",
-    "ox-ui": "file:../ox-ui",
     "pg": "^8.23.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card } from "ox-ui";
+import { Button, Card } from "@drop-ox/ox-ui";
 import { useRef, useState } from "react";
 
 import {

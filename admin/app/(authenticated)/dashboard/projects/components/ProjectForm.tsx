@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "ox-ui";
-import { Card } from "ox-ui";
+import { Button } from "@drop-ox/ox-ui";
+import { Card } from "@drop-ox/ox-ui";
 import { useRef, useState } from "react";
 
 import { PROJECT_STATUS_OPTIONS, type ProjectStatus } from "../constants";

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { Breadcrumbs, Text } from "ox-ui";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ox-ui";
+import { Breadcrumbs, Text } from "@drop-ox/ox-ui";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@drop-ox/ox-ui";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
 

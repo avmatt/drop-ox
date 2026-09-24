@@ -11,7 +11,7 @@ import {
   TableHeaderCell,
   TableRow,
   Text,
-} from "ox-ui";
+} from "@drop-ox/ox-ui";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
 

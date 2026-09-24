@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   experimental: {
     externalDir: true,
   },
-  transpilePackages: ["ox-ui"],
+  transpilePackages: ["@drop-ox/ox-ui"],
 };
 
 export default nextConfig;

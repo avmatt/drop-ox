@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-} from "ox-ui";
+} from "@drop-ox/ox-ui";
 
 import { PROJECT_STATUS_LABELS, type ProjectStatus } from "../constants";
 
