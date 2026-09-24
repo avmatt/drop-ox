@@ -43,7 +43,7 @@ export default async function AuthenticatedLayout({ children }: AuthenticatedLay
                 Drop OX
               </Text>
               <Text variant="primary" size="lg">
-                Client Portal
+                Partner Portal
               </Text>
             </div>
           </Link>
