@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source "../node_modules/ox-ui/dist";
+@source "../node_modules/@drop-ox/ox-ui/dist";
 
 :root {
   --background: #ffffff;

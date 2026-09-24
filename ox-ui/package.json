@@ -1,5 +1,5 @@
 {
-  "name": "ox-ui",
+  "name": "@drop-ox/ox-ui",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "sync:consumers": "npm run build && npm --prefix ../admin run ui:refresh && npm --prefix ../portal run ui:refresh"
+    "pack:local": "npm run build && rm -f drop-ox-ox-ui-*.tgz && npm pack",
+    "sync:consumers": "npm run pack:local && npm --prefix ../admin run ui:refresh && npm --prefix ../portal run ui:refresh"
   },
   "exports": {
     ".": {

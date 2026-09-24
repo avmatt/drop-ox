@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Breadcrumbs, Button } from "ox-ui";
+import { Breadcrumbs, Button } from "@drop-ox/ox-ui";
 import { db } from "@/lib/db/db";
 import { Route } from "@/lib/routes";
 

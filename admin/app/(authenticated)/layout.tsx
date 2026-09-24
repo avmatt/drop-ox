@@ -9,7 +9,7 @@ import {
   RectangleGroupIcon,
 } from "@heroicons/react/24/outline";
 
-import { Text } from "ox-ui";
+import { Text } from "@drop-ox/ox-ui";
 
 import { auth } from "@/lib/auth/auth";
 import { Route } from "@/lib/routes";

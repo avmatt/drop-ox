@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-} from "ox-ui";
+} from "@drop-ox/ox-ui";
 
 import { DOCUMENT_REQUEST_STATUS_LABELS, type DocumentRequestStatus } from "../constants";
 

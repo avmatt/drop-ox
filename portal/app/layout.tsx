@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DropOX Portal",
-  description: "Client portal for DropOX document workflows",
+  title: "DropOX Partner Portal",
+  description: "Partner portal for DropOX document workflows",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
