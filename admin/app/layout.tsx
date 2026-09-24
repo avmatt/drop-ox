@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DropOX Admin",
+  title: "DropOX Admin Console",
   description: "Admin portal for DropOX document workflows",
 };
 

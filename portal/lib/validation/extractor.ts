@@ -1,5 +1,7 @@
 import mammoth from "mammoth";
 import Tesseract from "tesseract.js";
+import { existsSync } from "node:fs";
+import path from "node:path";
 
 function extractTextFromTextFile(buffer: Buffer) {
   return buffer.toString("utf-8");
@@ -19,8 +21,28 @@ async function extractTextFromWord(buffer: Buffer) {
   return result.value ?? "";
 }
 
+function resolveTesseractWorkerPath() {
+  const directPath = path.join(
+    process.cwd(),
+    "node_modules",
+    "tesseract.js",
+    "src",
+    "worker-script",
+    "node",
+    "index.js",
+  );
+
+  if (existsSync(directPath)) {
+    return directPath;
+  }
+
+  return require.resolve("tesseract.js/src/worker-script/node/index.js");
+}
+
 async function extractTextFromImage(buffer: Buffer) {
-  const { data } = await Tesseract.recognize(buffer, "eng");
+  const { data } = await Tesseract.recognize(buffer, "eng", {
+    workerPath: resolveTesseractWorkerPath(),
+  });
   return data?.text ?? "";
 }
 

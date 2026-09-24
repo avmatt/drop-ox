@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DropOX Portal",
+  title: "DropOX Partner Portal",
   description: "Partner portal for DropOX document workflows",
 };
 
