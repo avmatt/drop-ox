@@ -1,12 +1,32 @@
-# Marketing Site
+# Drop OX
+
+Drop OX is a monorepo for the customer-facing portal, internal admin console, and a shared UI package.
+
+## Apps and Libraries
+
+- `portal`: Public marketing site plus authenticated partner portal for document upload, validation, and extraction workflows.
+- `admin`: Internal admin console for managing document types and operational configuration.
+- `ox-ui` (`@drop-ox/ox-ui`): Shared React UI component library used by both apps.
+
+## Tech Stack
+
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- Better Auth
+- Prisma
+
+# Screenshots
+
+## Marketing Site
 <img width="1582" height="1035" alt="Screenshot 2026-09-25 at 10 50 16 AM" src="https://github.com/user-attachments/assets/3f5d542a-2ec7-4c61-8866-1bfd487bb7f0" />
 
-# Partner Portal
+## Partner Portal
 <img width="1582" height="1035" alt="Screenshot 2026-09-25 at 10 50 22 AM" src="https://github.com/user-attachments/assets/9d266827-7aaf-4b54-8df5-a7a6e60788af" />
 <img width="1582" height="1035" alt="Screenshot 2026-09-25 at 10 50 44 AM" src="https://github.com/user-attachments/assets/6f51d801-8c15-4f48-b3b3-fe2f3a44c019" />
 <img width="1582" height="1035" alt="Screenshot 2026-09-25 at 10 51 05 AM" src="https://github.com/user-attachments/assets/eac02876-4bad-4eb9-9811-885667252025" />
 
-# Admin Console
+## Admin Console
 <img width="1582" height="1035" alt="Screenshot 2026-09-25 at 10 51 11 AM" src="https://github.com/user-attachments/assets/3aed9459-8e30-4240-8020-39861ae7f1a4" />
 <img width="1582" height="1035" alt="Screenshot 2026-09-25 at 10 51 17 AM" src="https://github.com/user-attachments/assets/8c51ff01-e800-4e3a-9f85-01d76d710d37" />
 <img width="1582" height="1035" alt="Screenshot 2026-09-25 at 10 51 31 AM" src="https://github.com/user-attachments/assets/103962ba-00c8-4db6-9628-15064b54b09d" />
